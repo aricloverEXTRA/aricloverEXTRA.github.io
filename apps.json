@@ -1,18 +1,28 @@
 {
+  "name": "uYouEnhanced Source",
+  "identifier": "com.uyouplusextra.source",
+  "website": "https://github.com/arichornlover/uYouEnhanced",
+  "subtitle": "uYouEnhanced official Altstore source.",
+  "description": "This is the official Altstore source for uYouEnhanced.\n\nuYouEnhanced is a modified version of qnblackcat's uYouPlus & MiRO92's uYou with even more features. It offers a superior YouTube experience with features like skipping sponsorships, more PiP options, unlocking higher resolutions, and much more.\n\nFor full details on what's included, check the GitHub repository:\n\nhttps://github.com/arichornlover/uYouEnhanced",
+  "tintColor": "e81e8a",
+  "iconURL": "https://raw.githubusercontent.com/arichornlover/uYouEnhanced/1314354bff6ef07aca60d7b9a77bd91a5f985ab4/Localizations/uYouPlus.bundle/AppIcons/AppIcon4.png",
+  "headerURL": "https://raw.githubusercontent.com/arichornlover/uYouEnhanced/1314354bff6ef07aca60d7b9a77bd91a5f985ab4/Localizations/uYouPlus.bundle/AppIcons/AppIcon4.png",
   "apps": [
     {
       "beta": false,
+      "name": "uYouEnhanced",
       "bundleIdentifier": "com.google.ios.youtube",
       "developerName": "arichornlover & Various Contributors",
-      "category": "photo-video",
-      "META": { "repoName": "uYouEnhanced Source" },
-      "contact": {
-          "web": "https://github.com/arichornlover/uYouEnhanced"
-      },
-      "downloadURL": "https://files.catbox.moe/c6rw78.ipa",
+      "subtitle": "uYouPlus with even more features!",
+      "version": "20.05.4",
+      "versionDate": "2025-6-11",
+      "versionDescription": "Current YouTube IPA: \"20.05.4\"\nCurrent uYouEnhanced Version: \"3.0.4\"\n\nRELEASE 20.05.4 - 3.0.4: (2025-06-11)\n\n• Updated YouTube to v20.05.4\n• Updated options: LowContrastMode and YTAppVersionSpoofer\n• Reminder: the App Version Spoofer now supports up to v19.23.3 but I now recently removed older versions like 17.33.2-18.34.5 due to them no longer working.\n• Updated submodules",
+      "downloadURL": "https://tinyurl.com/5adbp43m",
+      "localizedDescription": "uYou is the best tweak for the YouTube app. uYouEnhanced is a modified version of qnblackcat's uYouPlus & MiRO92's uYou with even more features. Additional features include skipping sponsorships in videos, more PiP options, unlocking higher resolutions, disabling overlays, removing upsell alerts, dimming the UI, enabling the miniplayer, preventing notch issues, configuring A/B settings, and adding a timestamp button.",
       "iconURL": "https://raw.githubusercontent.com/arichornlover/uYouEnhanced/1314354bff6ef07aca60d7b9a77bd91a5f985ab4/Localizations/uYouPlus.bundle/AppIcons/AppIcon4.png",
-      "localizedDescription": "uYou is the best tweak for the YouTube app.\n \n uYouEnhanced is a modified version of qnblackcat's uYouPlus & MiRO92's uYou with even more features.\n \n Additional features:\n • Skip sponsorships in videos (iSponsorBlock)\n • Even more PiP options (YouPiP)\n • Unlock 1440p and 2160p resolutions (YTUHD)\n • Disable overlay at the end of videos (YTNoHoverCards)\n • Remove YouTube Premium upsell alerts (NoYTPremium)\n • Enable to Dim the YouTube UI (LowContrastMode)\n • Enable the miniplayer for all videos (YTMiniplayerEnabler)\n • Prevent the notch/Dynamic Island from cutting into 2:1 videos (DontEatMyContent)\n • Configure A/B settings in the YouTube app (YTABConfig)\n • Adds a new button in the Video Player that allows you to copy a url with the ?t=timestamp (YouTimeStamp)\n • And more\n \n More information: \n https://github.com/arichornlover/uYouEnhanced/ \n \n Requires iOS/iPadOS 15.0 or later.\n \n Contributors: qnblackcat, PoomSmart, level3tjg, BandarHelal, galactic, julioverne, Foxster, CokePokes, arichornlover, bhackel and many others. \n\n Credits: MiRO92, HASHBANG, galactic, Lyvendia, ichitaso, Ahmed Bafkir, Tommy Teo, Dayanch96, theos, dodieboy, balackburn and many others.",
-      "name": "uYouEnhanced",
+      "tintColor": "e81e8a",
+      "category": "photo-video",
+      "size": 123022104,
       "screenshotURLs": [
         "https://github.com/therealFoxster/AltSource/blob/master/assets/screenshots/uYouPlus/uyouplus1.jpeg?raw=true",
         "https://github.com/therealFoxster/AltSource/blob/master/assets/screenshots/uYouPlus/uyouplus2.jpeg?raw=true",
@@ -21,73 +31,45 @@
         "https://github.com/therealFoxster/AltSource/blob/master/assets/screenshots/uYouPlus/uyouplus5.jpeg?raw=true",
         "https://github.com/therealFoxster/AltSource/blob/master/assets/screenshots/uYouPlus/uyouplus6.jpeg?raw=true"
       ],
-      "size": 125035106,
-      "minOSVersion": "15.0",
       "appPermissions": {
         "entitlements": [
-          { "name": "com.apple.security.application-groups" },
-          { "name": "com.apple.developer.associated-domains" },
-          { "name": "com.apple.developer.coremedia.allow-alternate-video-decoder-selection" },
-          { "name": "com.apple.developer.usernotifications.time-sensitive" },
-          { "name": "get-task-allow" },
-          { "name": "com.apple.developer.device-information.user-assigned-device-name" },
-          { "name": "com.apple.developer.group-session" },
-          { "name": "keychain-access-groups" },
-          { "name": "com.apple.developer.networking.multicast" },
-          { "name": "aps-environment" },
-          { "name": "com.apple.developer.siri" },
-          { "name": "com.apple.developer.networking.wifi-info" }
+          "com.apple.security.application-groups",
+          "com.apple.developer.associated-domains",
+          "com.apple.developer.coremedia.allow-alternate-video-decoder-selection",
+          "com.apple.developer.usernotifications.time-sensitive",
+          "get-task-allow",
+          "com.apple.developer.device-information.user-assigned-device-name",
+          "com.apple.developer.group-session",
+          "keychain-access-groups",
+          "com.apple.developer.networking.multicast",
+          "aps-environment",
+          "com.apple.developer.siri",
+          "com.apple.developer.networking.wifi-info"
         ],
-          "privacy": [
-            {
-              "name": "AppleMusic",
-              "usageDescription": "This lets you add your own audio files to your videos."
-            },
-            {
-              "name": "BluetoothPeripheral",
-              "usageDescription": "YouTube needs bluetooth access to scan for nearby Cast devices."
-            },
-            {
-              "name": "Camera",
-              "usageDescription": "This lets you create videos using the app."
-            },
-            {
-              "name": "Contacts",
-              "usageDescription": "Your contacts will be sent to YouTube servers to help you find friends to share videos with."
-            },
-            {
-              "name": "LocalNetwork",
-              "usageDescription": "Access to your network allows YouTube to discover and connect to devices such as your TV."
-            },
-            {
-              "name": "LocationWhenInUse",
-              "usageDescription": "Makes it easier for you to attach location information to your videos and live streams and allows for features such as improved recommendations and ads."
-            },
-            {
-              "name": "Microphone",
-              "usageDescription": "This lets you include audio with your videos and search using your voice."
-            },
-            {
-              "name": "PhotoLibrary",
-              "usageDescription": "This lets you upload media you've already created."
-            },
-            {
-              "name": "NSUserTrackingUsageDescription",
-              "usageDescription": "A message that informs the user why an app is requesting permission to use data for tracking the user or the device."
-            }
-          ]
-        },
-      "subtitle": "uYouEnhanced is a tweak for the YouTube app.",
-      "tintColor": "e81e8a",
-      "version": "19.40.4",
-      "versionDate": "2024-10-10",
-      "versionDescription": "• Updated YouTube to v19.40.4\n • uYou is using 3.0.4\n • New Option: Replace YT Download with uYou \n • Updated Copy Settings button (most of the keys were changed, might affect backups.) \n • Updated App Version Spoofer (23+ additonal YT versions!) \n • Updated Alderis (iOS 18+ Fix) \n • Updated Submodules"
+        "privacy": {
+          "NSAppleMusicUsageDescription": "This lets you add your own audio files to your videos.",
+          "NSBluetoothPeripheralUsageDescription": "YouTube needs bluetooth access to scan for nearby Cast devices.",
+          "NSCameraUsageDescription": "This lets you create videos using the app.",
+          "NSContactsUsageDescription": "Your contacts will be sent to YouTube servers to help you find friends to share videos with.",
+          "NSLocalNetworkUsageDescription": "Access to your network allows YouTube to discover and connect to devices such as your TV.",
+          "NSLocationWhenInUseUsageDescription": "Makes it easier for you to attach location information to your videos and live streams and allows for features such as improved recommendations and ads.",
+          "NSMicrophoneUsageDescription": "This lets you include audio with your videos and search using your voice.",
+          "NSPhotoLibraryUsageDescription": "This lets you upload media you've already created.",
+          "NSUserTrackingUsageDescription": "A message that informs the user why an app is requesting permission to use data for tracking the user or the device."
+        }
+      },
+      "versions": [
+        {
+          "version": "19.49.7",
+          "date": "2025-01-14",
+          "localizedDescription": "Current YouTube IPA: \"19.49.7\"\nCurrent uYouEnhanced Version: \"3.0.4\"\n\nRELEASE 19.49.7 - 3.0.4: (2025-01-14)\n\n• Updated YouTube to v19.49.7\n• Updated options: Notifications Tab, Notifications Tab Customization, and YTAppVersionSpoofer\n• Reminder: the App Version Spoofer now deprecates older versions like 17.33.2-18.34.5 due to app issues\n• Updated submodules",
+          "downloadURL": "https://tinyurl.com/5adbp43m",
+          "size": 123022104
+        }
+      ]
     }
   ],
-  "identifier": "com.uyouplusextra.source",
-  "name": "uYouEnhanced Source",
   "sourceURL": "https://raw.githubusercontent.com/arichornlover/arichornlover.github.io/main/apps.json",
-  "website": "https://github.com/arichornlover/uYouEnhanced",
   "news": [],
   "userInfo": {}
 }
