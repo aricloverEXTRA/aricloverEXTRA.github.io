@@ -8,7 +8,7 @@
   <!-- Bold, modern font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/style.css" />
 
@@ -22,9 +22,17 @@
     <img src="pack.png" alt="Expansion Logo" />
     <div class="nav-title">Darkomizer — Default Dark Mode: Expansion</div>
   </div>
-  <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">
-    <span id="themeIcon">☀️</span>
-  </button>
+
+  <div class="nav-right">
+    <a class="nav-link" href="https://www.curseforge.com/" target="_blank" rel="noopener">CurseForge</a>
+    <a class="nav-link" href="https://modrinth.com/" target="_blank" rel="noopener">Modrinth</a>
+    <a class="nav-link" href="https://www.planetminecraft.com/" target="_blank" rel="noopener">Planet Minecraft</a>
+    <a class="nav-link" href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+
+    <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">
+      <span id="themeIcon">☀️</span>
+    </button>
+  </div>
 </nav>
 
 <div class="page">
@@ -68,18 +76,16 @@
       </p>
 
       <div class="control-group">
-        <label>Main GUI Color</label>
-        <div class="color-row">
-          <input type="color" id="mainColorPicker" value="#ffffff" />
-          <input type="text" id="mainColorHex" value="#ffffff" />
-        </div>
-      </div>
-
-      <div class="control-group">
-        <label>Border Color</label>
-        <div class="color-row">
-          <input type="color" id="borderColorPicker" value="#000000" />
-          <input type="text" id="borderColorHex" value="#000000" />
+        <label>Colors</label>
+        <div class="color-dot-row">
+          <div class="color-dot-wrapper" title="Main color">
+            <input type="color" id="mainColorPicker" value="#ffffff" />
+            <span class="color-dot-label">Main</span>
+          </div>
+          <div class="color-dot-wrapper" title="Border color">
+            <input type="color" id="borderColorPicker" value="#000000" />
+            <span class="color-dot-label">Border</span>
+          </div>
         </div>
       </div>
 
