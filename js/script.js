@@ -352,4 +352,4 @@ generateBtn.onclick = async () => {
   } catch (e) {
     backendStatus.textContent = "Something went wrong while generating the customized pack.";
   }
-}
+};
