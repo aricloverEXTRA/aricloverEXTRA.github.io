@@ -66,20 +66,28 @@ function hexToRgb(hex) {
   };
 }
 
+/* Only treat pixels that are exactly #000000 as "border" */
+function isPureBlack(r, g, b) {
+  return r === 0 && g === 0 && b === 0;
+}
+
+/* PREVIEW DRAWING (crop to 176x166 from top-left of 256x256) */
 function drawPreview(i) {
   if (!loaded[i]) return;
   const img = images[i];
   const canvas = canvases[i];
   const ctx = canvas.getContext("2d");
 
-  const size = 256;
-  canvas.width = size;
-  canvas.height = size;
+  const cropWidth = 176;
+  const cropHeight = 166;
 
-  ctx.clearRect(0, 0, size, size);
-  ctx.drawImage(img, 0, 0, size, size);
+  canvas.width = cropWidth;
+  canvas.height = cropHeight;
 
-  const imageData = ctx.getImageData(0, 0, size, size);
+  ctx.clearRect(0, 0, cropWidth, cropHeight);
+  ctx.drawImage(img, 0, 0, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+
+  const imageData = ctx.getImageData(0, 0, cropWidth, cropHeight);
   const data = imageData.data;
 
   const mainRgb = hexToRgb(currentMainColor) || hexToRgb(defaultMainColor);
@@ -92,13 +100,13 @@ function drawPreview(i) {
     const a = data[p + 3];
     if (a === 0) continue;
 
-    const brightness = (r + g + b) / 3;
-
-    if (brightness < 50) {
+    if (isPureBlack(r, g, b)) {
+      // pure black treated as border
       data[p] = borderRgb.r;
       data[p + 1] = borderRgb.g;
       data[p + 2] = borderRgb.b;
     } else {
+      // tint everything else by main color
       data[p] = (r * mainRgb.r) / 255;
       data[p + 1] = (g * mainRgb.g) / 255;
       data[p + 2] = (b * mainRgb.b) / 255;
@@ -130,58 +138,25 @@ function rotatePreview() {
 loadPreviews();
 setInterval(rotatePreview, 30000);
 
-/* COLOR CONTROLS (Preferences) */
+/* COLOR CONTROLS (Preferences) — only color pickers, no text boxes */
 const mainColorPicker = document.getElementById("mainColorPicker");
-const mainColorHex = document.getElementById("mainColorHex");
 const borderColorPicker = document.getElementById("borderColorPicker");
-const borderColorHex = document.getElementById("borderColorHex");
-
 const applyBtn = document.getElementById("applyBtn");
 const resetBtn = document.getElementById("resetBtn");
 
-function syncColorInputsFromPickers() {
-  mainColorHex.value = mainColorPicker.value;
-  borderColorHex.value = borderColorPicker.value;
-}
-
 mainColorPicker.addEventListener("input", () => {
-  mainColorHex.value = mainColorPicker.value;
   currentMainColor = mainColorPicker.value;
   refreshAllPreviews();
 });
 
 borderColorPicker.addEventListener("input", () => {
-  borderColorHex.value = borderColorPicker.value;
   currentBorderColor = borderColorPicker.value;
   refreshAllPreviews();
 });
 
-mainColorHex.addEventListener("change", () => {
-  if (!hexToRgb(mainColorHex.value)) {
-    mainColorHex.value = currentMainColor;
-    return;
-  }
-  mainColorPicker.value = mainColorHex.value;
-  currentMainColor = mainColorHex.value;
-  refreshAllPreviews();
-});
-
-borderColorHex.addEventListener("change", () => {
-  if (!hexToRgb(borderColorHex.value)) {
-    borderColorHex.value = currentBorderColor;
-    return;
-  }
-  borderColorPicker.value = borderColorHex.value;
-  currentBorderColor = borderColorHex.value;
-  refreshAllPreviews();
-});
-
 applyBtn.onclick = () => {
-  if (!hexToRgb(mainColorHex.value) || !hexToRgb(borderColorHex.value)) return;
-  currentMainColor = mainColorHex.value;
-  currentBorderColor = borderColorHex.value;
-  mainColorPicker.value = currentMainColor;
-  borderColorPicker.value = currentBorderColor;
+  currentMainColor = mainColorPicker.value;
+  currentBorderColor = borderColorPicker.value;
   refreshAllPreviews();
 };
 
@@ -190,13 +165,10 @@ resetBtn.onclick = () => {
   currentBorderColor = defaultBorderColor;
   mainColorPicker.value = defaultMainColor;
   borderColorPicker.value = defaultBorderColor;
-  syncColorInputsFromPickers();
   refreshAllPreviews();
 };
 
-syncColorInputsFromPickers();
-
-/* VERSION DATA (used for base + customization) */
+/* VERSION DATA */
 const versionFiles = {
   "Mainline (1.19.0+)": {
     "2026.1.1": "Default-Dark-Mode-Expansion-1.19.0+-2026.1.1.zip",
@@ -304,9 +276,7 @@ async function recolorPngArrayBuffer(arrayBuffer, mainHex, borderHex) {
     const a = data[p + 3];
     if (a === 0) continue;
 
-    const brightness = (r + g + b) / 3;
-
-    if (brightness < 50) {
+    if (isPureBlack(r, g, b)) {
       data[p] = borderRgb.r;
       data[p + 1] = borderRgb.g;
       data[p + 2] = borderRgb.b;
@@ -382,4 +352,4 @@ generateBtn.onclick = async () => {
   } catch (e) {
     backendStatus.textContent = "Something went wrong while generating the customized pack.";
   }
-};
+}
