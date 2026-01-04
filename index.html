@@ -1,328 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Darkomizer — Default Dark Mode: Expansion</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Darkomizer — Default Dark Mode: Expansion</title>
 
-  <style>
-    :root {
-      --bg: #e9e9e9;
-      --text: #1a1a1a;
-      --glass: rgba(255, 255, 255, 0.65);
-      --accent: #d4af37;
-      --border: rgba(212, 175, 55, 0.4);
-      --muted: #666666;
-      --nav-bg: rgba(255, 255, 255, 0.7);
-    }
+<style>
+/* ------------------------------------------------ */
+/* THEME VARIABLES */
+/* ------------------------------------------------ */
+:root {
+  --bg: #e9e9e9;
+  --text: #1a1a1a;
+  --glass: rgba(255, 255, 255, 0.65);
+  --accent: #d4af37;
+  --border: rgba(212, 175, 55, 0.4);
+  --muted: #666;
+  --nav-bg: rgba(255, 255, 255, 0.7);
+}
 
-    [data-theme="dark"] {
-      --bg: #0d0d0d;
-      --text: #e6e6e6;
-      --glass: rgba(0, 0, 0, 0.55);
-      --border: rgba(212, 175, 55, 0.3);
-      --muted: #aaaaaa;
-      --nav-bg: rgba(0, 0, 0, 0.7);
-    }
+[data-theme="dark"] {
+  --bg: #0d0d0d;
+  --text: #e6e6e6;
+  --glass: rgba(0, 0, 0, 0.55);
+  --border: rgba(212, 175, 55, 0.3);
+  --muted: #aaa;
+  --nav-bg: rgba(0, 0, 0, 0.7);
+}
 
-    * {
-      box-sizing: border-box;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    body {
-      margin: 0;
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      transition: background 0.3s, color 0.3s;
-      opacity: 0;
-      animation: fadeIn 0.45s ease-out forwards;
-    }
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  opacity: 0;
+  animation: fadeIn 0.4s ease-out forwards;
+}
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
+/* ------------------------------------------------ */
+/* NAVBAR */
+/* ------------------------------------------------ */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  backdrop-filter: blur(14px);
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--accent);
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 20;
+}
 
-    /* NAVBAR */
-    nav {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      backdrop-filter: blur(14px);
-      background: var(--nav-bg);
-      border-bottom: 1px solid var(--accent);
-      padding: 10px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 20;
-    }
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+.nav-left img {
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
 
-    .nav-left img {
-      height: 36px;
-      width: auto;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
+.nav-title {
+  font-weight: 700;
+  font-size: 18px;
+}
 
-    .nav-title {
-      font-weight: 700;
-      font-size: 18px;
-    }
+.nav-right button {
+  background: var(--accent);
+  border: none;
+  color: #000;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
 
-    .nav-right button {
-      background: var(--accent);
-      border: none;
-      color: #000;
-      font-weight: 600;
-      border-radius: 999px;
-      padding: 8px 14px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: transform 0.1s, box-shadow 0.1s, opacity 0.2s;
-    }
+/* ------------------------------------------------ */
+/* LAYOUT */
+/* ------------------------------------------------ */
+.page {
+  max-width: 1200px;
+  margin: 80px auto 32px;
+  padding: 16px;
+}
 
-    .nav-right button:hover {
-      opacity: 0.95;
-      box-shadow: 0 0 0 1px var(--border), 0 3px 10px rgba(0,0,0,0.2);
-      transform: translateY(-1px);
-    }
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 20px;
+}
 
-    /* LAYOUT */
-    .page {
-      max-width: 1200px;
-      margin: 80px auto 32px;
-      padding: 16px;
-    }
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-      gap: 20px;
-    }
+.card {
+  background: var(--glass);
+  backdrop-filter: blur(18px);
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+}
 
-    @media (max-width: 900px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
+.card h2 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
 
-    .card {
-      background: var(--glass);
-      backdrop-filter: blur(18px);
-      border-radius: 16px;
-      padding: 18px 18px 20px;
-      border: 1px solid var(--border);
-      box-shadow: 0 4px 18px rgba(0,0,0,0.1);
-    }
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
 
-    .card h2 {
-      margin: 0 0 8px 0;
-      font-size: 18px;
-    }
+/* ------------------------------------------------ */
+/* PREVIEW */
+/* ------------------------------------------------ */
+.preview-wrapper {
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: rgba(0,0,0,0.35);
+}
 
-    .muted {
-      color: var(--muted);
-      font-size: 13px;
-    }
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  color: #eee;
+  font-size: 13px;
+}
 
-    /* PREVIEW AREA */
-    .preview-wrapper {
-      position: relative;
-      overflow: hidden;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,0.35);
-    }
+.preview-carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
 
-    .preview-inner {
-      position: relative;
-      width: 100%;
-      padding: 14px;
-    }
+.preview-slide {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.35s ease-out, opacity 0.35s ease-out;
+}
 
-    .preview-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-      color: #f0f0f0;
-      font-size: 13px;
-    }
+.preview-slide.hidden-left {
+  transform: translateX(-100%);
+  opacity: 0;
+}
 
-    .preview-header span {
-      opacity: 0.85;
-    }
+.preview-slide.hidden-right {
+  transform: translateX(100%);
+  opacity: 0;
+}
 
-    .preview-carousel {
-      position: relative;
-      width: 100%;
-      overflow: hidden;
-    }
+.preview-slide.active {
+  transform: translateX(0);
+  opacity: 1;
+}
 
-    .preview-canvas-container {
-      width: 100%;
-      position: relative;
-    }
+canvas {
+  width: 100%;
+  display: block;
+  background: #000;
+  border-radius: 10px;
+}
 
-    canvas {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 10px;
-      background: #000;
-    }
+/* ------------------------------------------------ */
+/* CONTROLS */
+/* ------------------------------------------------ */
+.control-group {
+  margin-bottom: 12px;
+}
 
-    .preview-slide {
-      position: absolute;
-      inset: 0;
-      transition: transform 0.35s ease-out, opacity 0.35s ease-out;
-    }
+.control-group label {
+  font-size: 13px;
+  margin-bottom: 4px;
+  display: block;
+}
 
-    .preview-slide.hidden-left {
-      transform: translateX(-100%);
-      opacity: 0;
-      pointer-events: none;
-    }
+.control-group input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,0.03);
+  color: var(--text);
+}
 
-    .preview-slide.hidden-right {
-      transform: translateX(100%);
-      opacity: 0;
-      pointer-events: none;
-    }
+.btn {
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-size: 14px;
+}
 
-    .preview-slide.active {
-      transform: translateX(0);
-      opacity: 1;
-    }
+.btn-primary {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+}
 
-    .preview-label {
-      text-align: center;
-      color: #f0f0f0;
-      font-size: 13px;
-      margin-top: 4px;
-    }
+.btn-ghost {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--accent);
+}
 
-    /* CONTROLS */
-    .control-group {
-      margin-bottom: 12px;
-    }
+/* ------------------------------------------------ */
+/* VERSION SELECT */
+/* ------------------------------------------------ */
+.version-select-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
-    .control-group label {
-      display: block;
-      font-size: 13px;
-      margin-bottom: 4px;
-    }
+select {
+  flex: 1;
+  min-width: 200px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,0.03);
+  color: var(--text);
+}
 
-    .control-group input[type="text"] {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,0.03);
-      color: var(--text);
-      font-size: 14px;
-    }
+.version-hint {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 6px;
+}
 
-    .control-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 8px;
-    }
-
-    .btn {
-      border-radius: 999px;
-      padding: 8px 14px;
-      font-size: 14px;
-      cursor: pointer;
-      border: 1px solid transparent;
-      transition: transform 0.1s, box-shadow 0.1s, opacity 0.2s;
-      white-space: nowrap;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #000;
-      border-color: var(--accent);
-      font-weight: 600;
-    }
-
-    .btn-primary:hover {
-      opacity: 0.95;
-      box-shadow: 0 0 0 1px var(--border), 0 3px 10px rgba(0,0,0,0.2);
-      transform: translateY(-1px);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--accent);
-      border-color: var(--accent);
-    }
-
-    .btn-ghost:hover {
-      background: rgba(212, 175, 55, 0.12);
-      transform: translateY(-1px);
-    }
-
-    .error-text {
-      color: #ff4b4b;
-      font-size: 12px;
-      margin-top: 4px;
-      min-height: 16px;
-    }
-
-    /* VERSION CARD */
-    .version-select-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-
-    select {
-      flex: 1;
-      min-width: 200px;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,0.03);
-      color: var(--text);
-      font-size: 14px;
-    }
-
-    .version-hint {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 6px;
-    }
-
-    footer {
-      max-width: 1200px;
-      margin: 4px auto 20px;
-      padding: 0 16px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-  </style>
+/* ------------------------------------------------ */
+/* FOOTER */
+/* ------------------------------------------------ */
+footer {
+  max-width: 1200px;
+  margin: 4px auto 20px;
+  padding: 0 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+</style>
 </head>
+
 <body>
 
+<!-- NAVBAR -->
 <nav>
   <div class="nav-left">
     <img src="pack.png" alt="Expansion Logo" />
@@ -336,338 +278,209 @@
 <div class="page">
 
   <div class="grid">
-    <!-- PREVIEW SIDE -->
+
+    <!-- PREVIEW -->
     <div class="card">
       <h2>Live GUI Preview</h2>
-      <p class="muted">
-        Preview how your GUI looks with different colors. The preview rotates between Inventory, Smithing Table, and Loom every 30 seconds.
-      </p>
+      <p class="muted">Rotates between Inventory, Enchanting Table, and Loom every 30 seconds.</p>
 
       <div class="preview-wrapper">
-        <div class="preview-inner">
-          <div class="preview-header">
-            <span id="previewName">Inventory</span>
-            <span id="previewStatus" class="muted">Sliding preview</span>
-          </div>
+        <div class="preview-header">
+          <span id="previewName">Inventory</span>
+          <span class="muted">Sliding preview</span>
+        </div>
 
-          <div class="preview-carousel">
-            <div class="preview-slide active" id="slide0">
-              <div class="preview-canvas-container">
-                <canvas id="canvas0"></canvas>
-              </div>
-            </div>
-            <div class="preview-slide hidden-right" id="slide1">
-              <div class="preview-canvas-container">
-                <canvas id="canvas1"></canvas>
-              </div>
-            </div>
-            <div class="preview-slide hidden-right" id="slide2">
-              <div class="preview-canvas-container">
-                <canvas id="canvas2"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div class="preview-label" id="previewLabel">Inventory GUI</div>
+        <div class="preview-carousel">
+          <div class="preview-slide active" id="slide0"><canvas id="canvas0"></canvas></div>
+          <div class="preview-slide hidden-right" id="slide1"><canvas id="canvas1"></canvas></div>
+          <div class="preview-slide hidden-right" id="slide2"><canvas id="canvas2"></canvas></div>
         </div>
       </div>
     </div>
 
-    <!-- CONTROLS SIDE -->
+    <!-- CONTROLS -->
     <div class="card">
       <h2>GUI Colors</h2>
-      <p class="muted">
-        Adjust the main GUI tint and its border color using hex codes. Text color customization is not supported for this pack.
-      </p>
+      <p class="muted">Adjust the GUI tint and border color. Text color customization is not supported.</p>
 
       <div class="control-group">
-        <label for="mainColor">Main GUI Color (hex)</label>
-        <input type="text" id="mainColor" value="#ffffff" />
+        <label>Main GUI Color</label>
+        <input id="mainColor" value="#ffffff" />
       </div>
 
       <div class="control-group">
-        <label for="borderColor">Border Color (hex)</label>
-        <input type="text" id="borderColor" value="#000000" />
+        <label>Border Color</label>
+        <input id="borderColor" value="#000000" />
       </div>
 
-      <div class="control-row">
-        <button class="btn btn-primary" id="applyBtn">Apply Colors</button>
-        <button class="btn btn-ghost" id="resetBtn">Reset to Defaults</button>
-      </div>
-
-      <div class="error-text" id="errorText"></div>
-
-      <p class="muted" style="margin-top:10px;">
-        This customization affects how the GUI looks in the preview and will guide future downloadable presets.
-      </p>
+      <button class="btn btn-primary" id="applyBtn">Apply Colors</button>
+      <button class="btn btn-ghost" id="resetBtn">Reset</button>
     </div>
+
   </div>
 
-  <!-- VERSION DOWNLOAD CARD -->
-  <div class="card" style="margin-top:20px;">
+  <!-- VERSION SELECT -->
+  <div class="card">
     <h2>Download Expansion Versions</h2>
-    <p class="muted">
-      Choose a version of Default Dark Mode: Expansion and download it directly. Mainline releases target 1.19.0+, with legacy entries for 1.18.2 and 1.12.2.
-    </p>
 
     <div class="version-select-row">
       <select id="versionSelect"></select>
-      <button class="btn btn-ghost" id="downloadBtn">Download selected</button>
+      <button class="btn btn-ghost" id="downloadBtn">Download</button>
     </div>
 
     <div class="version-hint" id="versionHint">
-      Select a version to see its file name and download from the <code>releases/</code> folder.
+      Select a version to download.
     </div>
   </div>
 
 </div>
 
 <footer>
-  Built for <strong>Default Dark Mode: Expansion</strong>. UI inspired by modern platforms like Modrinth.  
+  Built for Default Dark Mode: Expansion.
 </footer>
 
 <script>
-  // THEME TOGGLE
-  const themeToggle = document.getElementById("themeToggle");
-  const savedTheme = localStorage.getItem("theme") || "dark";
-  document.documentElement.setAttribute("data-theme", savedTheme);
+/* ------------------------------------------------ */
+/* THEME TOGGLE */
+/* ------------------------------------------------ */
+const themeToggle = document.getElementById("themeToggle");
+document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");
 
-  themeToggle.addEventListener("click", () => {
-    const current = document.documentElement.getAttribute("data-theme");
-    const next = current === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
-  });
+themeToggle.onclick = () => {
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
+};
 
-  // PREVIEW LOGIC
-  const previewNames = ["Inventory", "Smithing Table", "Loom"];
-  const previewFiles = ["inventory.png", "smithing.png", "loom.png"];
-  const slides = [
-    document.getElementById("slide0"),
-    document.getElementById("slide1"),
-    document.getElementById("slide2")
-  ];
-  const canvases = [
-    document.getElementById("canvas0"),
-    document.getElementById("canvas1"),
-    document.getElementById("canvas2")
-  ];
-  const previewNameEl = document.getElementById("previewName");
-  const previewLabelEl = document.getElementById("previewLabel");
-  const previewStatusEl = document.getElementById("previewStatus");
+/* ------------------------------------------------ */
+/* PREVIEW IMAGES */
+/* ------------------------------------------------ */
+const previewNames = ["Inventory", "Enchanting Table", "Loom"];
+const previewFiles = ["inventory.png", "enchanting_table.png", "loom.png"];
 
-  let currentIndex = 0;
-  let imagesLoaded = [false, false, false];
-  const baseImages = [new Image(), new Image(), new Image()];
+const slides = [
+  document.getElementById("slide0"),
+  document.getElementById("slide1"),
+  document.getElementById("slide2")
+];
 
-  const defaultMainColor = "#ffffff";
-  const defaultBorderColor = "#000000";
+const canvases = [
+  document.getElementById("canvas0"),
+  document.getElementById("canvas1"),
+  document.getElementById("canvas2")
+];
 
-  let currentMainColor = defaultMainColor;
-  let currentBorderColor = defaultBorderColor;
+const previewNameEl = document.getElementById("previewName");
 
-  function loadImages() {
-    previewFiles.forEach((file, i) => {
-      baseImages[i].src = "preview/" + file;
-      baseImages[i].onload = () => {
-        imagesLoaded[i] = true;
-        drawRecolored(i);
-      };
-    });
-  }
+let currentIndex = 0;
+let images = [new Image(), new Image(), new Image()];
+let loaded = [false, false, false];
 
-  function hexToRgb(hex) {
-    hex = hex.trim();
-    if (!hex.startsWith("#")) return null;
-    hex = hex.slice(1);
-    if (hex.length === 3) {
-      hex = hex.split("").map(c => c + c).join("");
-    }
-    if (hex.length !== 6) return null;
-    const num = parseInt(hex, 16);
-    if (Number.isNaN(num)) return null;
-    return {
-      r: (num >> 16) & 255,
-      g: (num >> 8) & 255,
-      b: num & 255
+function loadPreviews() {
+  previewFiles.forEach((file, i) => {
+    images[i].src = "preview/" + file;
+    images[i].onload = () => {
+      loaded[i] = true;
+      drawPreview(i);
     };
-  }
+  });
+}
 
-  function drawRecolored(index) {
-    if (!imagesLoaded[index]) return;
-    const img = baseImages[index];
-    const canvas = canvases[index];
-    const ctx = canvas.getContext("2d");
+function drawPreview(i) {
+  if (!loaded[i]) return;
+  const img = images[i];
+  const canvas = canvases[i];
+  const ctx = canvas.getContext("2d");
 
-    const maxWidth = 1024;
-    const scale = img.width > maxWidth ? maxWidth / img.width : 1;
-    canvas.width = img.width * scale;
-    canvas.height = img.height * scale;
+  canvas.width = img.width;
+  canvas.height = img.height;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  ctx.drawImage(img, 0, 0);
+}
 
-    const mainRgb = hexToRgb(currentMainColor);
-    if (mainRgb) {
-      ctx.globalCompositeOperation = "multiply";
-      ctx.fillStyle = `rgb(${mainRgb.r},${mainRgb.g},${mainRgb.b})`;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.globalCompositeOperation = "source-over";
-    }
+function rotatePreview() {
+  currentIndex = (currentIndex + 1) % 3;
 
-    const borderRgb = hexToRgb(currentBorderColor);
-    if (borderRgb) {
-      const borderThickness = Math.max(2, Math.floor(canvas.width * 0.01));
-      ctx.strokeStyle = `rgb(${borderRgb.r},${borderRgb.g},${borderRgb.b})`;
-      ctx.lineWidth = borderThickness;
-      ctx.strokeRect(
-        borderThickness / 2,
-        borderThickness / 2,
-        canvas.width - borderThickness,
-        canvas.height - borderThickness
-      );
-    }
-  }
-
-  function refreshAllPreviews() {
-    for (let i = 0; i < 3; i++) {
-      drawRecolored(i);
-    }
-  }
-
-  function showSlide(idx) {
-    slides.forEach((slide, i) => {
-      if (i === idx) {
-        slide.classList.add("active");
-        slide.classList.remove("hidden-left", "hidden-right");
-      } else if (i < idx) {
-        slide.classList.add("hidden-left");
-        slide.classList.remove("active", "hidden-right");
-      } else {
-        slide.classList.add("hidden-right");
-        slide.classList.remove("active", "hidden-left");
-      }
-    });
-    previewNameEl.textContent = previewNames[idx];
-    previewLabelEl.textContent = previewNames[idx] + " GUI";
-  }
-
-  function advanceSlide() {
-    currentIndex = (currentIndex + 1) % 3;
-    showSlide(currentIndex);
-  }
-
-  loadImages();
-  showSlide(currentIndex);
-  setInterval(advanceSlide, 30000);
-
-  // COLOR CONTROLS
-  const mainColorInput = document.getElementById("mainColor");
-  const borderColorInput = document.getElementById("borderColor");
-  const applyBtn = document.getElementById("applyBtn");
-  const resetBtn = document.getElementById("resetBtn");
-  const errorText = document.getElementById("errorText");
-
-  function isValidHex(hex) {
-    hex = hex.trim();
-    if (!hex.startsWith("#")) return false;
-    const stripped = hex.slice(1);
-    if (![3, 6].includes(stripped.length)) return false;
-    return /^[0-9a-fA-F]+$/.test(stripped);
-  }
-
-  applyBtn.addEventListener("click", () => {
-    const m = mainColorInput.value;
-    const b = borderColorInput.value;
-    if (!isValidHex(m) || !isValidHex(b)) {
-      errorText.textContent = "Please enter valid hex colors like #ffffff or #000000.";
-      return;
-    }
-    errorText.textContent = "";
-    currentMainColor = m;
-    currentBorderColor = b;
-    refreshAllPreviews();
+  slides.forEach((slide, i) => {
+    slide.classList.remove("active", "hidden-left", "hidden-right");
+    if (i === currentIndex) slide.classList.add("active");
+    else if (i < currentIndex) slide.classList.add("hidden-left");
+    else slide.classList.add("hidden-right");
   });
 
-  resetBtn.addEventListener("click", () => {
-    mainColorInput.value = defaultMainColor;
-    borderColorInput.value = defaultBorderColor;
-    errorText.textContent = "";
-    currentMainColor = defaultMainColor;
-    currentBorderColor = defaultBorderColor;
-    refreshAllPreviews();
-  });
+  previewNameEl.textContent = previewNames[currentIndex];
+}
 
-  // VERSION SELECT + DOWNLOAD
-  const versionSelect = document.getElementById("versionSelect");
-  const downloadBtn = document.getElementById("downloadBtn");
-  const versionHint = document.getElementById("versionHint");
+loadPreviews();
+setInterval(rotatePreview, 30000);
 
-  const versionFiles = {
-    "Mainline (1.19.0+)": {
-      "2026.1.1": "Default-Dark-Mode-Expansion-1.19.0+-2026.1.1.zip",
-      "2025.10.31": "Default-Dark-Mode-Expansion-1.19.0+-2025.10.31.zip",
-      "2025.10.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.10.1.zip",
-      "2025.8.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.8.1.zip",
-      "2025.7.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.7.1.zip",
-      "2025.6.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.6.1.zip",
-      "2025.5.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.5.1.zip",
-      "2025.4.5": "Default-Dark-Mode-Expansion-1.19.0+-2025.4.5.zip",
-      "2025.4.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.4.1.zip",
-      "2025.3.25": "Default-Dark-Mode-Expansion-1.19.0+-2025.3.25.zip"
-    },
-    "Legacy (1.18.2)": {
-      "Default-Dark-Mode-Expansion-1.18.0+1.18.2-2025.3.25.zip":
-      "Default-Dark-Mode-Expansion-1.18.0+1.18.2-2025.3.25.zip"
-    },
-    "Legacy (1.12.2)": {
-      "Default-Dark-Mode-Expansion-1.12.x-2025.10.31.zip":
-      "Default-Dark-Mode-Expansion-1.12.x-2025.10.31.zip"
+/* ------------------------------------------------ */
+/* VERSION SELECT */
+/* ------------------------------------------------ */
+const versionSelect = document.getElementById("versionSelect");
+const versionHint = document.getElementById("versionHint");
+const downloadBtn = document.getElementById("downloadBtn");
+
+const versionFiles = {
+  "Mainline (1.19.0+)": {
+    "2026.1.1": "Default-Dark-Mode-Expansion-1.19.0+-2026.1.1.zip",
+    "2025.10.31": "Default-Dark-Mode-Expansion-1.19.0+-2025.10.31.zip",
+    "2025.10.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.10.1.zip",
+    "2025.8.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.8.1.zip",
+    "2025.7.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.7.1.zip",
+    "2025.6.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.6.1.zip",
+    "2025.5.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.5.1.zip",
+    "2025.4.5": "Default-Dark-Mode-Expansion-1.19.0+-2025.4.5.zip",
+    "2025.4.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.4.1.zip",
+    "2025.3.25": "Default-Dark-Mode-Expansion-1.19.0+-2025.3.25.zip"
+  },
+
+  "Legacy (1.18.2)": {
+    "2025.3.25": "Default-Dark-Mode-Expansion-1.18.0+1.18.2-2025.3.25.zip"
+  },
+
+  "Legacy (1.12.2)": {
+    "2025.10.31": "Default-Dark-Mode-Expansion-1.12.x-2025.10.31.zip"
+  }
+};
+
+function buildVersionOptions() {
+  let html = "";
+  for (const group in versionFiles) {
+    html += `<optgroup label="${group}">`;
+    for (const label in versionFiles[group]) {
+      html += `<option value="${group}::${label}">${label}</option>`;
     }
+    html += `</optgroup>`;
+  }
+  versionSelect.innerHTML = html;
+}
+
+buildVersionOptions();
+
+function getSelectedVersion() {
+  const val = versionSelect.value;
+  if (!val.includes("::")) return null;
+  const [group, label] = val.split("::");
+  return {
+    label,
+    file: versionFiles[group][label],
+    url: "releases/" + versionFiles[group][label]
   };
+}
 
-  function buildVersionOptions() {
-    let html = "";
-    for (const group in versionFiles) {
-      html += `<optgroup label="${group}">`;
-      for (const label in versionFiles[group]) {
-        html += `<option value="${group}::${label}">${label}</option>`;
-      }
-      html += `</optgroup>`;
-    }
-    versionSelect.innerHTML = html;
-  }
+versionSelect.onchange = () => {
+  const sel = getSelectedVersion();
+  if (!sel) return;
+  versionHint.innerHTML = `Selected: <strong>${sel.label}</strong> — File: <code>${sel.file}</code>`;
+};
 
-  function getSelectedVersion() {
-    const val = versionSelect.value;
-    if (!val || !val.includes("::")) return null;
-    const [group, label] = val.split("::");
-    const file = versionFiles[group][label];
-    if (!file) return null;
-    return { group, label, file, url: `releases/${file}` };
-  }
-
-  buildVersionOptions();
-
-  versionSelect.addEventListener("change", () => {
-    const sel = getSelectedVersion();
-    if (!sel) {
-      versionHint.textContent = "Select a version to see its file name and download from the releases folder.";
-      return;
-    }
-    versionHint.innerHTML = `Selected: <strong>${sel.label}</strong> — File: <code>${sel.file}</code>`;
-  });
-
-  downloadBtn.addEventListener("click", () => {
-    const sel = getSelectedVersion();
-    if (!sel) return;
-    window.location.href = sel.url;
-  });
-
-  const initialSel = getSelectedVersion();
-  if (initialSel) {
-    versionHint.innerHTML = `Selected: <strong>${initialSel.label}</strong> — File: <code>${initialSel.file}</code>`;
-  }
+downloadBtn.onclick = () => {
+  const sel = getSelectedVersion();
+  if (!sel) return;
+  window.location.href = sel.url;
+};
 </script>
 
 </body>
