@@ -41,6 +41,9 @@ const defaultBorderColor = "#000000";
 let currentMainColor = defaultMainColor;
 let currentBorderColor = defaultBorderColor;
 
+/* Vanilla preset flag */
+let vanillaPresetActive = false;
+
 function loadPreviews() {
   previewFiles.forEach((file, i) => {
     images[i].src = "preview/" + file;
@@ -71,7 +74,7 @@ function isPureBlack(r, g, b) {
   return r === 0 && g === 0 && b === 0;
 }
 
-/* PREVIEW DRAWING (crop to 176x166 from top-left of 256x256) */
+/* PREVIEW DRAWING (crop to 176x166 from top-right of 256x256) */
 function drawPreview(i) {
   if (!loaded[i]) return;
   const img = images[i];
@@ -80,12 +83,15 @@ function drawPreview(i) {
 
   const cropWidth = 176;
   const cropHeight = 166;
+  const sourceWidth = img.width || 256;
+  const startX = Math.max(0, sourceWidth - cropWidth); // top-right crop
+  const startY = 0;
 
   canvas.width = cropWidth;
   canvas.height = cropHeight;
 
   ctx.clearRect(0, 0, cropWidth, cropHeight);
-  ctx.drawImage(img, 0, 0, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+  ctx.drawImage(img, startX, startY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
 
   const imageData = ctx.getImageData(0, 0, cropWidth, cropHeight);
   const data = imageData.data;
@@ -94,22 +100,30 @@ function drawPreview(i) {
   const borderRgb = hexToRgb(currentBorderColor) || hexToRgb(defaultBorderColor);
 
   for (let p = 0; p < data.length; p += 4) {
-    const r = data[p];
-    const g = data[p + 1];
-    const b = data[p + 2];
+    let r = data[p];
+    let g = data[p + 1];
+    let b = data[p + 2];
     const a = data[p + 3];
     if (a === 0) continue;
 
-    if (isPureBlack(r, g, b)) {
-      // pure black treated as border
-      data[p] = borderRgb.r;
-      data[p + 1] = borderRgb.g;
-      data[p + 2] = borderRgb.b;
+    if (vanillaPresetActive) {
+      // Vanilla preset = brighten by ~40% to approximate original brightness
+      r = Math.min(255, Math.round(r * 1.4));
+      g = Math.min(255, Math.round(g * 1.4));
+      b = Math.min(255, Math.round(b * 1.4));
+      data[p] = r;
+      data[p + 1] = g;
+      data[p + 2] = b;
     } else {
-      // tint everything else by main color
-      data[p] = (r * mainRgb.r) / 255;
-      data[p + 1] = (g * mainRgb.g) / 255;
-      data[p + 2] = (b * mainRgb.b) / 255;
+      if (isPureBlack(r, g, b)) {
+        data[p] = borderRgb.r;
+        data[p + 1] = borderRgb.g;
+        data[p + 2] = borderRgb.b;
+      } else {
+        data[p] = (r * mainRgb.r) / 255;
+        data[p + 1] = (g * mainRgb.g) / 255;
+        data[p + 2] = (b * mainRgb.b) / 255;
+      }
     }
   }
 
@@ -136,31 +150,47 @@ function rotatePreview() {
 }
 
 loadPreviews();
-setInterval(rotatePreview, 30000);
+/* 15 seconds instead of 30 */
+setInterval(rotatePreview, 15000);
 
-/* COLOR CONTROLS (Preferences) — only color pickers, no text boxes */
+/* COLOR CONTROLS (Preferences) — only color pickers */
 const mainColorPicker = document.getElementById("mainColorPicker");
 const borderColorPicker = document.getElementById("borderColorPicker");
 const applyBtn = document.getElementById("applyBtn");
 const resetBtn = document.getElementById("resetBtn");
+const vanillaPresetBtn = document.getElementById("vanillaPresetBtn");
 
 mainColorPicker.addEventListener("input", () => {
+  vanillaPresetActive = false;
   currentMainColor = mainColorPicker.value;
   refreshAllPreviews();
 });
 
 borderColorPicker.addEventListener("input", () => {
+  vanillaPresetActive = false;
   currentBorderColor = borderColorPicker.value;
   refreshAllPreviews();
 });
 
 applyBtn.onclick = () => {
+  vanillaPresetActive = false;
   currentMainColor = mainColorPicker.value;
   currentBorderColor = borderColorPicker.value;
   refreshAllPreviews();
 };
 
 resetBtn.onclick = () => {
+  vanillaPresetActive = false;
+  currentMainColor = defaultMainColor;
+  currentBorderColor = defaultBorderColor;
+  mainColorPicker.value = defaultMainColor;
+  borderColorPicker.value = defaultBorderColor;
+  refreshAllPreviews();
+};
+
+vanillaPresetBtn.onclick = () => {
+  // Vanilla: brightness restore, ignore custom colors
+  vanillaPresetActive = true;
   currentMainColor = defaultMainColor;
   currentBorderColor = defaultBorderColor;
   mainColorPicker.value = defaultMainColor;
@@ -221,7 +251,7 @@ function buildVersionList() {
       selectedVersionKey = item.getAttribute("data-key");
       const [group, label] = selectedVersionKey.split("::");
       const file = versionFiles[group][label];
-      versionHint.innerHTML = `Selected: <strong>${label}</strong> — File: <code>${file}</code>`;
+      versionHint.innerHTML = `Selected: <strong>${label}</strong> — <code>${file}</code>`;
     });
   });
 }
@@ -253,7 +283,7 @@ downloadBtn.onclick = () => {
 const generateBtn = document.getElementById("generateBtn");
 const backendStatus = document.getElementById("backendStatus");
 
-async function recolorPngArrayBuffer(arrayBuffer, mainHex, borderHex) {
+async function recolorPngArrayBuffer(arrayBuffer, mainHex, borderHex, vanillaMode) {
   const blob = new Blob([arrayBuffer], { type: "image/png" });
   const bitmap = await createImageBitmap(blob);
   const canvas = document.createElement("canvas");
@@ -270,20 +300,30 @@ async function recolorPngArrayBuffer(arrayBuffer, mainHex, borderHex) {
   const borderRgb = hexToRgb(borderHex) || hexToRgb(defaultBorderColor);
 
   for (let p = 0; p < data.length; p += 4) {
-    const r = data[p];
-    const g = data[p + 1];
-    const b = data[p + 2];
+    let r = data[p];
+    let g = data[p + 1];
+    let b = data[p + 2];
     const a = data[p + 3];
     if (a === 0) continue;
 
-    if (isPureBlack(r, g, b)) {
-      data[p] = borderRgb.r;
-      data[p + 1] = borderRgb.g;
-      data[p + 2] = borderRgb.b;
+    if (vanillaMode) {
+      // Vanilla: brighten
+      r = Math.min(255, Math.round(r * 1.4));
+      g = Math.min(255, Math.round(g * 1.4));
+      b = Math.min(255, Math.round(b * 1.4));
+      data[p] = r;
+      data[p + 1] = g;
+      data[p + 2] = b;
     } else {
-      data[p] = (r * mainRgb.r) / 255;
-      data[p + 1] = (g * mainRgb.g) / 255;
-      data[p + 2] = (b * mainRgb.b) / 255;
+      if (isPureBlack(r, g, b)) {
+        data[p] = borderRgb.r;
+        data[p + 1] = borderRgb.g;
+        data[p + 2] = borderRgb.b;
+      } else {
+        data[p] = (r * mainRgb.r) / 255;
+        data[p + 1] = (g * mainRgb.g) / 255;
+        data[p + 2] = (b * mainRgb.b) / 255;
+      }
     }
   }
 
@@ -316,13 +356,14 @@ generateBtn.onclick = async () => {
 
     const mainHex = currentMainColor;
     const borderHex = currentBorderColor;
+    const vanillaMode = vanillaPresetActive;
 
     const promises = [];
 
     zip.forEach((path, file) => {
       if (!file.dir && path.toLowerCase().endsWith(".png")) {
         const p = file.async("arraybuffer").then(async arrayBuffer => {
-          const recolored = await recolorPngArrayBuffer(arrayBuffer, mainHex, borderHex);
+          const recolored = await recolorPngArrayBuffer(arrayBuffer, mainHex, borderHex, vanillaMode);
           newZip.file(path, recolored);
         });
         promises.push(p);
