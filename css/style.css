@@ -65,9 +65,34 @@ nav {
 }
 
 .nav-title {
-  font-weight: 700;
+  font-weight: 800;
   font-size: 16px;
   letter-spacing: 0.02em;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-link {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  color: var(--muted);
+  background: transparent;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  border-color: var(--border);
+  background: rgba(212, 175, 55, 0.12);
+  color: var(--text);
+  transform: translateY(-1px);
 }
 
 /* Theme icon button */
@@ -116,7 +141,7 @@ nav {
 .card h2 {
   margin: 0 0 6px 0;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .preview-card {
@@ -220,29 +245,35 @@ canvas {
   display: block;
 }
 
-.color-row {
+/* Color dots row */
+.color-dot-row {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
 }
 
-.color-row input[type="color"] {
+.color-dot-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.color-dot-wrapper input[type="color"] {
   width: 38px;
   height: 38px;
   border-radius: 999px;
   border: 2px solid var(--border);
   padding: 0;
   background: transparent;
+  cursor: pointer;
 }
 
-.color-row input[type="text"] {
-  flex: 1;
-  padding: 7px 10px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.03);
-  color: var(--text);
-  font-size: 14px;
+.color-dot-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
 }
 
 /* BUTTONS */
@@ -252,7 +283,8 @@ canvas {
   cursor: pointer;
   border: 1px solid transparent;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
+  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out, background 0.15s, color 0.15s;
 }
 
 .btn-primary {
@@ -261,10 +293,20 @@ canvas {
   border-color: var(--accent);
 }
 
+.btn-primary:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  transform: translateY(-1px) scale(1.01);
+}
+
 .btn-ghost {
   background: transparent;
   color: var(--accent);
   border-color: var(--accent);
+}
+
+.btn-ghost:hover {
+  background: rgba(212, 175, 55, 0.12);
+  transform: translateY(-1px);
 }
 
 .button-row {
@@ -304,6 +346,12 @@ canvas {
   border: 1px solid transparent;
   background: rgba(0, 0, 0, 0.03);
   cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.version-item:hover {
+  border-color: var(--border);
+  transform: translateY(-1px);
 }
 
 .version-item.selected {
@@ -312,12 +360,12 @@ canvas {
 }
 
 .version-label {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 13px;
 }
 
 .version-meta {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--muted);
 }
 
@@ -340,4 +388,4 @@ footer {
   padding: 0 12px;
   font-size: 12px;
   color: var(--muted);
-
+}
