@@ -1,8 +1,163 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta http-equiv="refresh" content="0; url=https://arichornlover.github.io">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Default Dark Mode: Expansion — Darkomizer</title>
+
+    <style>
+        /* ---------- THEME VARIABLES ---------- */
+        :root {
+            --bg: #f5f5f5;
+            --text: #1a1a1a;
+            --card: #ffffff;
+            --accent: #d4af37; /* Gold */
+            --nav-bg: rgba(255, 255, 255, 0.6);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0d0d0d;
+            --text: #e6e6e6;
+            --card: #1a1a1a;
+            --nav-bg: rgba(0, 0, 0, 0.4);
+        }
+
+        /* ---------- GLOBAL STYLES ---------- */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* ---------- NAVBAR ---------- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            backdrop-filter: blur(12px);
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--accent);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        nav .title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        nav button {
+            background: var(--accent);
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #000;
+            font-weight: bold;
+        }
+
+        /* ---------- MAIN CONTENT ---------- */
+        .container {
+            margin-top: 100px;
+            max-width: 900px;
+            padding: 20px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .upload-box {
+            border: 2px dashed var(--accent);
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .upload-box:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+    </style>
 </head>
+
 <body>
+
+    <!-- ---------- NAVBAR ---------- -->
+    <nav>
+        <div class="title">Darkomizer — Default Dark Mode: Expansion</div>
+        <button id="themeToggle">Toggle Theme</button>
+    </nav>
+
+    <!-- ---------- MAIN CONTENT ---------- -->
+    <div class="container">
+
+        <div class="card">
+            <h2>Darkomize Your Textures</h2>
+            <p>Upload a ZIP containing your mod’s GUI textures. The Darkomizer will process all PNG files using the same 40% darkening method used in the Expansion.</p>
+
+            <div class="upload-box" id="uploadBox">
+                Click or drag a ZIP file here
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Download Resource Pack Versions</h2>
+            <p>Select a version of Default Dark Mode: Expansion to download.</p>
+
+            <select id="versionSelect">
+                <option>Loading versions...</option>
+            </select>
+        </div>
+
+    </div>
+
+    <script>
+        /* ---------- THEME TOGGLE ---------- */
+        const toggle = document.getElementById("themeToggle");
+
+        toggle.addEventListener("click", () => {
+            const current = document.documentElement.getAttribute("data-theme");
+            const next = current === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", next);
+            localStorage.setItem("theme", next);
+        });
+
+        // Load saved theme
+        const saved = localStorage.getItem("theme") || "light";
+        document.documentElement.setAttribute("data-theme", saved);
+
+        /* ---------- VERSION LOADING (STATIC FOR NOW) ---------- */
+        const versionSelect = document.getElementById("versionSelect");
+
+        // You will replace this with dynamic loading from /releases/
+        const versions = [
+            "2026.1.1",
+            "2025.12.20",
+            "2025.10.31"
+        ];
+
+        versionSelect.innerHTML = versions
+            .map(v => `<option value="${v}">${v}</option>`)
+            .join("");
+    </script>
+
 </body>
 </html>
