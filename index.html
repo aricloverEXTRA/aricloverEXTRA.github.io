@@ -1,49 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Darkomizer — Default Dark Mode: Expansion</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Darkomizer — Default Dark Mode: Expansion</title>
 
-  <!-- Bold, modern font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+/* ------------------------------------------------ */
+/* THEME VARIABLES */
+/* ------------------------------------------------ */
+:root {
+  --bg: #e9e9e9;
+  --text: #1a1a1a;
+  --glass: rgba(255, 255, 255, 0.65);
+  --accent: #d4af37;
+  --border: rgba(212, 175, 55, 0.4);
+  --muted: #666;
+  --nav-bg: rgba(255, 255, 255, 0.7);
+}
 
-  <link rel="stylesheet" href="css/style.css" />
+[data-theme="dark"] {
+  --bg: #0d0d0d;
+  --text: #e6e6e6;
+  --glass: rgba(0, 0, 0, 0.55);
+  --border: rgba(212, 175, 55, 0.3);
+  --muted: #aaa;
+  --nav-bg: rgba(0, 0, 0, 0.7);
+}
 
-  <!-- JSZip for in-browser zip read/write -->
-  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  opacity: 0;
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ------------------------------------------------ */
+/* NAVBAR */
+/* ------------------------------------------------ */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  backdrop-filter: blur(14px);
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--accent);
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 20;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-left img {
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.nav-title {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.nav-right button {
+  background: var(--accent);
+  border: none;
+  color: #000;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+/* ------------------------------------------------ */
+/* LAYOUT */
+/* ------------------------------------------------ */
+.page {
+  max-width: 1200px;
+  margin: 80px auto 32px;
+  padding: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--glass);
+  backdrop-filter: blur(18px);
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+}
+
+.card h2 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ------------------------------------------------ */
+/* PREVIEW */
+/* ------------------------------------------------ */
+.preview-wrapper {
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: rgba(0,0,0,0.35);
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  color: #eee;
+  font-size: 13px;
+}
+
+.preview-carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.preview-slide {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.35s ease-out, opacity 0.35s ease-out;
+}
+
+.preview-slide.hidden-left {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.preview-slide.hidden-right {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.preview-slide.active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+canvas {
+  width: 100%;
+  display: block;
+  background: #000;
+  border-radius: 10px;
+}
+
+/* ------------------------------------------------ */
+/* CONTROLS */
+/* ------------------------------------------------ */
+.control-group {
+  margin-bottom: 12px;
+}
+
+.control-group label {
+  font-size: 13px;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.control-group input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,0.03);
+  color: var(--text);
+}
+
+.btn {
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-size: 14px;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ------------------------------------------------ */
+/* VERSION SELECT */
+/* ------------------------------------------------ */
+.version-select-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+select {
+  flex: 1;
+  min-width: 200px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,0.03);
+  color: var(--text);
+}
+
+.version-hint {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* ------------------------------------------------ */
+/* FOOTER */
+/* ------------------------------------------------ */
+footer {
+  max-width: 1200px;
+  margin: 4px auto 20px;
+  padding: 0 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+</style>
 </head>
+
 <body>
 
+<!-- NAVBAR -->
 <nav>
   <div class="nav-left">
     <img src="pack.png" alt="Expansion Logo" />
     <div class="nav-title">Darkomizer — Default Dark Mode: Expansion</div>
   </div>
-
   <div class="nav-right">
-    <a class="nav-link" href="https://www.curseforge.com/" target="_blank" rel="noopener">CurseForge</a>
-    <a class="nav-link" href="https://modrinth.com/" target="_blank" rel="noopener">Modrinth</a>
-    <a class="nav-link" href="https://www.planetminecraft.com/" target="_blank" rel="noopener">Planet Minecraft</a>
-    <a class="nav-link" href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
-
-    <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">
-      <span id="themeIcon">☀️</span>
-    </button>
+    <button id="themeToggle">Toggle Theme</button>
   </div>
 </nav>
 
 <div class="page">
 
-  <div class="layout-main">
+  <div class="grid">
+
     <!-- PREVIEW -->
-    <section class="card preview-card">
+    <div class="card">
       <h2>Live GUI Preview</h2>
-      <p class="muted">
-        Rotates between Inventory, Enchanting Table, and Loom every 30 seconds. Color changes are applied in real time.
-      </p>
+      <p class="muted">Rotates between Inventory, Enchanting Table, and Loom every 30 seconds.</p>
 
       <div class="preview-wrapper">
         <div class="preview-header">
@@ -52,86 +291,197 @@
         </div>
 
         <div class="preview-carousel">
-          <div class="preview-slide active" id="slide0">
-            <canvas id="canvas0"></canvas>
-          </div>
-          <div class="preview-slide hidden-right" id="slide1">
-            <canvas id="canvas1"></canvas>
-          </div>
-          <div class="preview-slide hidden-right" id="slide2">
-            <canvas id="canvas2"></canvas>
-          </div>
+          <div class="preview-slide active" id="slide0"><canvas id="canvas0"></canvas></div>
+          <div class="preview-slide hidden-right" id="slide1"><canvas id="canvas1"></canvas></div>
+          <div class="preview-slide hidden-right" id="slide2"><canvas id="canvas2"></canvas></div>
         </div>
       </div>
-    </section>
-
-    <!-- PREFERENCES -->
-    <section class="card prefs-card">
-      <div class="prefs-header">
-        <h2>Preferences</h2>
-      </div>
-
-      <p class="muted">
-        Adjust the main GUI tint and border color. Text color customization is not supported for this pack.
-      </p>
-
-      <div class="control-group">
-        <label>Colors</label>
-        <div class="color-dot-row">
-          <div class="color-dot-wrapper" title="Main color">
-            <input type="color" id="mainColorPicker" value="#ffffff" />
-            <span class="color-dot-label">Main</span>
-          </div>
-          <div class="color-dot-wrapper" title="Border color">
-            <input type="color" id="borderColorPicker" value="#000000" />
-            <span class="color-dot-label">Border</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="button-row">
-        <button class="btn btn-primary" id="applyBtn">Apply to Preview</button>
-        <button class="btn btn-ghost" id="resetBtn">Reset</button>
-      </div>
-
-      <div class="button-row">
-        <button class="btn btn-primary wide" id="generateBtn">
-          Generate customized pack (.zip)
-        </button>
-      </div>
-
-      <div class="muted small" id="backendStatus">
-        Customized pack is generated in your browser using the selected version as a base.
-      </div>
-    </section>
-  </div>
-
-  <!-- BASE VERSIONS (COMPACT, VERTICAL) -->
-  <section class="card versions-card">
-    <h2>Base Expansion Versions</h2>
-    <p class="muted">
-      Choose a base version of Default Dark Mode: Expansion. Mainline targets 1.19.0+, legacy targets 1.18.2 and 1.12.2.
-    </p>
-
-    <div class="version-list" id="versionList">
-      <!-- Filled by JS -->
     </div>
 
-    <div class="version-actions">
-      <button class="btn btn-ghost" id="downloadBtn">Download base</button>
+    <!-- CONTROLS -->
+    <div class="card">
+      <h2>GUI Colors</h2>
+      <p class="muted">Adjust the GUI tint and border color. Text color customization is not supported.</p>
+
+      <div class="control-group">
+        <label>Main GUI Color</label>
+        <input id="mainColor" value="#ffffff" />
+      </div>
+
+      <div class="control-group">
+        <label>Border Color</label>
+        <input id="borderColor" value="#000000" />
+      </div>
+
+      <button class="btn btn-primary" id="applyBtn">Apply Colors</button>
+      <button class="btn btn-ghost" id="resetBtn">Reset</button>
+    </div>
+
+  </div>
+
+  <!-- VERSION SELECT -->
+  <div class="card">
+    <h2>Download Expansion Versions</h2>
+
+    <div class="version-select-row">
+      <select id="versionSelect"></select>
+      <button class="btn btn-ghost" id="downloadBtn">Download</button>
     </div>
 
     <div class="version-hint" id="versionHint">
-      Select a version above to download or customize.
+      Select a version to download.
     </div>
-  </section>
+  </div>
 
 </div>
 
 <footer>
-  Built for Default Dark Mode: Expansion. UI inspired by Modrinth and modern dark‑mode workflows.
+  Built for Default Dark Mode: Expansion.
 </footer>
 
-<script src="js/script.js"></script>
+<script>
+/* ------------------------------------------------ */
+/* THEME TOGGLE */
+/* ------------------------------------------------ */
+const themeToggle = document.getElementById("themeToggle");
+document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");
+
+themeToggle.onclick = () => {
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
+};
+
+/* ------------------------------------------------ */
+/* PREVIEW IMAGES */
+/* ------------------------------------------------ */
+const previewNames = ["Inventory", "Enchanting Table", "Loom"];
+const previewFiles = ["inventory.png", "enchanting_table.png", "loom.png"];
+
+const slides = [
+  document.getElementById("slide0"),
+  document.getElementById("slide1"),
+  document.getElementById("slide2")
+];
+
+const canvases = [
+  document.getElementById("canvas0"),
+  document.getElementById("canvas1"),
+  document.getElementById("canvas2")
+];
+
+const previewNameEl = document.getElementById("previewName");
+
+let currentIndex = 0;
+let images = [new Image(), new Image(), new Image()];
+let loaded = [false, false, false];
+
+function loadPreviews() {
+  previewFiles.forEach((file, i) => {
+    images[i].src = "preview/" + file;
+    images[i].onload = () => {
+      loaded[i] = true;
+      drawPreview(i);
+    };
+  });
+}
+
+function drawPreview(i) {
+  if (!loaded[i]) return;
+  const img = images[i];
+  const canvas = canvases[i];
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = img.width;
+  canvas.height = img.height;
+
+  ctx.drawImage(img, 0, 0);
+}
+
+function rotatePreview() {
+  currentIndex = (currentIndex + 1) % 3;
+
+  slides.forEach((slide, i) => {
+    slide.classList.remove("active", "hidden-left", "hidden-right");
+    if (i === currentIndex) slide.classList.add("active");
+    else if (i < currentIndex) slide.classList.add("hidden-left");
+    else slide.classList.add("hidden-right");
+  });
+
+  previewNameEl.textContent = previewNames[currentIndex];
+}
+
+loadPreviews();
+setInterval(rotatePreview, 30000);
+
+/* ------------------------------------------------ */
+/* VERSION SELECT */
+/* ------------------------------------------------ */
+const versionSelect = document.getElementById("versionSelect");
+const versionHint = document.getElementById("versionHint");
+const downloadBtn = document.getElementById("downloadBtn");
+
+const versionFiles = {
+  "Mainline (1.19.0+)": {
+    "2026.1.1": "Default-Dark-Mode-Expansion-1.19.0+-2026.1.1.zip",
+    "2025.10.31": "Default-Dark-Mode-Expansion-1.19.0+-2025.10.31.zip",
+    "2025.10.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.10.1.zip",
+    "2025.8.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.8.1.zip",
+    "2025.7.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.7.1.zip",
+    "2025.6.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.6.1.zip",
+    "2025.5.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.5.1.zip",
+    "2025.4.5": "Default-Dark-Mode-Expansion-1.19.0+-2025.4.5.zip",
+    "2025.4.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.4.1.zip",
+    "2025.3.25": "Default-Dark-Mode-Expansion-1.19.0+-2025.3.25.zip"
+  },
+
+  "Legacy (1.18.2)": {
+    "2025.3.25": "Default-Dark-Mode-Expansion-1.18.0+1.18.2-2025.3.25.zip"
+  },
+
+  "Legacy (1.12.2)": {
+    "2025.10.31": "Default-Dark-Mode-Expansion-1.12.x-2025.10.31.zip"
+  }
+};
+
+function buildVersionOptions() {
+  let html = "";
+  for (const group in versionFiles) {
+    html += `<optgroup label="${group}">`;
+    for (const label in versionFiles[group]) {
+      html += `<option value="${group}::${label}">${label}</option>`;
+    }
+    html += `</optgroup>`;
+  }
+  versionSelect.innerHTML = html;
+}
+
+buildVersionOptions();
+
+function getSelectedVersion() {
+  const val = versionSelect.value;
+  if (!val.includes("::")) return null;
+  const [group, label] = val.split("::");
+  return {
+    label,
+    file: versionFiles[group][label],
+    url: "releases/" + versionFiles[group][label]
+  };
+}
+
+versionSelect.onchange = () => {
+  const sel = getSelectedVersion();
+  if (!sel) return;
+  versionHint.innerHTML = `Selected: <strong>${sel.label}</strong> — File: <code>${sel.file}</code>`;
+};
+
+downloadBtn.onclick = () => {
+  const sel = getSelectedVersion();
+  if (!sel) return;
+  window.location.href = sel.url;
+};
+</script>
+
 </body>
-</html>
+</html
