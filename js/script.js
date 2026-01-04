@@ -74,7 +74,7 @@ function isPureBlack(r, g, b) {
   return r === 0 && g === 0 && b === 0;
 }
 
-/* PREVIEW DRAWING (crop to 176x166 from top-right of 256x256) */
+/* PREVIEW DRAWING (crop to 176x166 from top-left) */
 function drawPreview(i) {
   if (!loaded[i]) return;
   const img = images[i];
@@ -83,8 +83,7 @@ function drawPreview(i) {
 
   const cropWidth = 176;
   const cropHeight = 166;
-  const sourceWidth = img.width || 256;
-  const startX = Math.max(0, sourceWidth - cropWidth);
+  const startX = 0;
   const startY = 0;
 
   canvas.width = cropWidth;
@@ -106,19 +105,19 @@ function drawPreview(i) {
     const a = data[p + 3];
     if (a === 0) continue;
 
-    // 1. Apply border tint to pure black pixels
+    // 1. Border tint on pure black
     if (isPureBlack(r, g, b)) {
       r = borderRgb.r;
       g = borderRgb.g;
       b = borderRgb.b;
     } else {
-      // 2. Apply main tint to everything else
+      // 2. Main tint
       r = (r * mainRgb.r) / 255;
       g = (g * mainRgb.g) / 255;
       b = (b * mainRgb.b) / 255;
     }
 
-    // 3. Vanilla preset: brighten final result by ~40%
+    // 3. Vanilla brightness boost
     if (vanillaPresetActive) {
       r = Math.min(255, Math.round(r * 1.4));
       g = Math.min(255, Math.round(g * 1.4));
@@ -176,7 +175,6 @@ borderColorPicker.addEventListener("input", () => {
 });
 
 vanillaPresetBtn.onclick = () => {
-  // Toggle Vanilla preset
   vanillaPresetActive = !vanillaPresetActive;
   if (vanillaPresetActive) {
     vanillaPresetBtn.classList.add("preset-active");
