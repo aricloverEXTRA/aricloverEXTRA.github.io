@@ -76,7 +76,7 @@ nav {
   gap: 8px;
 }
 
-/* Icon links in navbar */
+/* Icon links in navbar (Shields.io) */
 .nav-icon {
   width: 28px;
   height: 28px;
@@ -91,8 +91,8 @@ nav {
 }
 
 .nav-icon img {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   display: block;
 }
 
@@ -152,11 +152,11 @@ nav {
 }
 
 .preview-card {
-  min-height: 260px;
+  min-height: 240px;
 }
 
 .prefs-card {
-  min-height: 260px;
+  min-height: 220px;
 }
 
 .versions-card {
@@ -196,7 +196,7 @@ nav {
   width: 100%;
   overflow: hidden;
   padding: 10px;
-  min-height: 200px;
+  min-height: 180px;
 }
 
 .preview-slide {
@@ -225,7 +225,7 @@ nav {
 
 canvas {
   width: 100%;
-  max-width: 220px;
+  max-width: 200px;
   height: auto;
   display: block;
   margin: 0 auto;
@@ -244,6 +244,11 @@ canvas {
 .control-group {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.control-group.compact {
+  margin-top: 6px;
+  margin-bottom: 6px;
 }
 
 .control-group label {
@@ -266,6 +271,7 @@ canvas {
   align-items: center;
 }
 
+/* Make color inputs fully filled circles */
 .color-dot-wrapper {
   display: flex;
   flex-direction: column;
@@ -273,7 +279,11 @@ canvas {
   gap: 4px;
 }
 
+/* Remove default color input chrome */
 .color-dot-wrapper input[type="color"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   width: 40px;
   height: 40px;
   border-radius: 999px;
@@ -281,6 +291,23 @@ canvas {
   padding: 0;
   background: transparent;
   cursor: pointer;
+}
+
+/* WebKit inner swatch */
+.color-dot-wrapper input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: 999px;
+}
+
+.color-dot-wrapper input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 999px;
+}
+
+/* Firefox inner swatch */
+.color-dot-wrapper input[type="color"]::-moz-color-swatch {
+  border: none;
+  border-radius: 999px;
 }
 
 .color-dot-label {
@@ -331,8 +358,7 @@ canvas {
 }
 
 .wide {
-  width: 100%;
-  text-align: center;
+  width: auto;
 }
 
 /* VERSIONS LIST (VERTICAL, COMPACT) */
