@@ -27,18 +27,42 @@
   </div>
 
   <div class="nav-right">
-    <!-- You provide these icon files: icons/curseforge.svg, icons/modrinth.svg, icons/pmc.svg, icons/github.svg -->
-    <a class="nav-icon" href="https://www.curseforge.com/minecraft/texture-packs/default-dark-mode-expansion" target="_blank" rel="noopener" title="CurseForge">
-      <img src="icons/curseforge.svg" alt="CurseForge" />
+    <!-- Shields.io-based icons -->
+    <a
+      class="nav-icon"
+      href="https://www.curseforge.com/minecraft/texture-packs/default-dark-mode-expansion"
+      target="_blank"
+      rel="noopener"
+      title="CurseForge"
+    >
+      <img src="https://img.shields.io/badge/-?logo=curseforge&style=flat&logoColor=white&labelColor=000000" alt="CurseForge" />
     </a>
-    <a class="nav-icon" href="https://modrinth.com/resourcepack/default-dark-mode-expansion" target="_blank" rel="noopener" title="Modrinth">
-      <img src="icons/modrinth.svg" alt="Modrinth" />
+    <a
+      class="nav-icon"
+      href="https://modrinth.com/resourcepack/default-dark-mode-expansion"
+      target="_blank"
+      rel="noopener"
+      title="Modrinth"
+    >
+      <img src="https://img.shields.io/badge/-?logo=modrinth&style=flat&logoColor=white&labelColor=00AF5C" alt="Modrinth" />
     </a>
-    <a class="nav-icon" href="https://www.planetminecraft.com/texture-pack/default-dark-mode-expansion-1-19-1-21/" target="_blank" rel="noopener" title="Planet Minecraft">
-      <img src="icons/pmc.svg" alt="Planet Minecraft" />
+    <a
+      class="nav-icon"
+      href="https://www.planetminecraft.com/texture-pack/default-dark-mode-expansion-1-19-1-21/"
+      target="_blank"
+      rel="noopener"
+      title="Planet Minecraft"
+    >
+      <img src="https://img.shields.io/badge/-?logo=planetminecraft&style=flat&logoColor=white&labelColor=1F8B4C" alt="Planet Minecraft" />
     </a>
-    <a class="nav-icon" href="https://github.com/aricloverEXTRA/Default-Dark-Mode-Expansion" target="_blank" rel="noopener" title="GitHub">
-      <img src="icons/github.svg" alt="GitHub" />
+    <a
+      class="nav-icon"
+      href="https://github.com/aricloverEXTRA/Default-Dark-Mode-Expansion"
+      target="_blank"
+      rel="noopener"
+      title="GitHub"
+    >
+      <img src="https://img.shields.io/badge/-?logo=github&style=flat&logoColor=white&labelColor=000000" alt="GitHub" />
     </a>
 
     <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">
@@ -76,7 +100,7 @@
       </div>
     </section>
 
-    <!-- PREFERENCES -->
+    <!-- PREFERENCES (more compact) -->
     <section class="card prefs-card">
       <div class="prefs-header">
         <h2>Preferences</h2>
@@ -86,14 +110,14 @@
         Customize the GUI tint and border color. Text colors are not customizable in this pack.
       </p>
 
-      <div class="control-group">
+      <div class="control-group compact">
         <label>Presets</label>
         <div class="preset-row">
           <button class="btn btn-ghost" id="vanillaPresetBtn">Vanilla</button>
         </div>
       </div>
 
-      <div class="control-group">
+      <div class="control-group compact">
         <label>Colors</label>
         <div class="color-dot-row">
           <div class="color-dot-wrapper" title="Main color">
@@ -108,14 +132,8 @@
       </div>
 
       <div class="button-row">
-        <button class="btn btn-primary" id="applyBtn">Apply</button>
-        <button class="btn btn-ghost" id="resetBtn">Reset</button>
-      </div>
-
-      <div class="button-row">
-        <button class="btn btn-primary wide" id="generateBtn">
-          Generate customized pack (.zip)
-        </button>
+        <button class="btn btn-primary" id="generateBtn">Generate</button>
+        <button class="btn btn-ghost" id="randomizeBtn">Randomize</button>
       </div>
 
       <div class="muted small" id="backendStatus">
