@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Darkomizer — Default Dark Mode: Expansion</title>
 
-  <!-- Font similar to Modrinth (bold, clean) -->
+  <!-- Bold, modern font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -22,18 +22,20 @@
     <img src="pack.png" alt="Expansion Logo" />
     <div class="nav-title">Darkomizer — Default Dark Mode: Expansion</div>
   </div>
-  <div class="nav-right">
-    <button id="themeToggle">Toggle Theme</button>
-  </div>
+  <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">
+    <span id="themeIcon">☀️</span>
+  </button>
 </nav>
 
 <div class="page">
 
-  <div class="grid">
+  <div class="layout-main">
     <!-- PREVIEW -->
-    <div class="card">
+    <section class="card preview-card">
       <h2>Live GUI Preview</h2>
-      <p class="muted">Rotates between Inventory, Enchanting Table, and Loom every 30 seconds.</p>
+      <p class="muted">
+        Rotates between Inventory, Enchanting Table, and Loom every 30 seconds. Color changes are applied in real time.
+      </p>
 
       <div class="preview-wrapper">
         <div class="preview-header">
@@ -42,72 +44,81 @@
         </div>
 
         <div class="preview-carousel">
-          <div class="preview-slide active" id="slide0"><canvas id="canvas0"></canvas></div>
-          <div class="preview-slide hidden-right" id="slide1"><canvas id="canvas1"></canvas></div>
-          <div class="preview-slide hidden-right" id="slide2"><canvas id="canvas2"></canvas></div>
+          <div class="preview-slide active" id="slide0">
+            <canvas id="canvas0"></canvas>
+          </div>
+          <div class="preview-slide hidden-right" id="slide1">
+            <canvas id="canvas1"></canvas>
+          </div>
+          <div class="preview-slide hidden-right" id="slide2">
+            <canvas id="canvas2"></canvas>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- PREFERENCES -->
-    <div class="card">
-      <div class="tabs">
-        <button class="tab active" data-tab="preferences">Preferences</button>
+    <section class="card prefs-card">
+      <div class="prefs-header">
+        <h2>Preferences</h2>
       </div>
 
-      <div class="tab-content active" id="tab-preferences">
-        <h2>GUI Color Preferences</h2>
-        <p class="muted">
-          Adjust the GUI’s main tint and border color. Text color customization is not supported for this pack.
-        </p>
+      <p class="muted">
+        Adjust the main GUI tint and border color. Text color customization is not supported for this pack.
+      </p>
 
-        <div class="control-group">
-          <label>Main GUI Color</label>
-          <div class="color-row">
-            <input type="color" id="mainColorPicker" value="#ffffff" />
-            <input type="text" id="mainColorHex" value="#ffffff" />
-          </div>
-        </div>
-
-        <div class="control-group">
-          <label>Border Color</label>
-          <div class="color-row">
-            <input type="color" id="borderColorPicker" value="#000000" />
-            <input type="text" id="borderColorHex" value="#000000" />
-          </div>
-        </div>
-
-        <div class="button-row">
-          <button class="btn btn-primary" id="applyBtn">Apply to Preview</button>
-          <button class="btn btn-ghost" id="resetBtn">Reset</button>
-        </div>
-
-        <div class="button-row">
-          <button class="btn btn-primary wide" id="generateBtn">
-            Generate customized pack (.zip)
-          </button>
-        </div>
-
-        <div class="muted small" id="backendStatus">
-          Customized pack is generated in your browser using the selected version as a base.
+      <div class="control-group">
+        <label>Main GUI Color</label>
+        <div class="color-row">
+          <input type="color" id="mainColorPicker" value="#ffffff" />
+          <input type="text" id="mainColorHex" value="#ffffff" />
         </div>
       </div>
-    </div>
+
+      <div class="control-group">
+        <label>Border Color</label>
+        <div class="color-row">
+          <input type="color" id="borderColorPicker" value="#000000" />
+          <input type="text" id="borderColorHex" value="#000000" />
+        </div>
+      </div>
+
+      <div class="button-row">
+        <button class="btn btn-primary" id="applyBtn">Apply to Preview</button>
+        <button class="btn btn-ghost" id="resetBtn">Reset</button>
+      </div>
+
+      <div class="button-row">
+        <button class="btn btn-primary wide" id="generateBtn">
+          Generate customized pack (.zip)
+        </button>
+      </div>
+
+      <div class="muted small" id="backendStatus">
+        Customized pack is generated in your browser using the selected version as a base.
+      </div>
+    </section>
   </div>
 
-  <!-- VERSION SELECT -->
-  <div class="card">
-    <h2>Download Base Expansion Versions</h2>
+  <!-- BASE VERSIONS (COMPACT, VERTICAL) -->
+  <section class="card versions-card">
+    <h2>Base Expansion Versions</h2>
+    <p class="muted">
+      Choose a base version of Default Dark Mode: Expansion. Mainline targets 1.19.0+, legacy targets 1.18.2 and 1.12.2.
+    </p>
 
-    <div class="version-select-row">
-      <select id="versionSelect"></select>
+    <div class="version-list" id="versionList">
+      <!-- Filled by JS -->
+    </div>
+
+    <div class="version-actions">
       <button class="btn btn-ghost" id="downloadBtn">Download base</button>
     </div>
 
     <div class="version-hint" id="versionHint">
-      Select a version to download its original pack, or use it as a base for customization.
+      Select a version above to download or customize.
     </div>
-  </div>
+  </section>
 
 </div>
 
@@ -117,4 +128,4 @@
 
 <script src="js/script.js"></script>
 </body>
-</html
+</html>
