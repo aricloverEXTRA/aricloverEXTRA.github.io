@@ -1,6 +1,4 @@
-/* ------------------------------------------------ */
 /* THEME TOGGLE */
-/* ------------------------------------------------ */
 const themeToggle = document.getElementById("themeToggle");
 document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");
 
@@ -11,9 +9,7 @@ themeToggle.onclick = () => {
   localStorage.setItem("theme", next);
 };
 
-/* ------------------------------------------------ */
 /* PREVIEW IMAGES */
-/* ------------------------------------------------ */
 const previewNames = ["Inventory", "Enchanting Table", "Loom"];
 const previewFiles = ["inventory.png", "enchanting_table.png", "loom.png"];
 
@@ -35,6 +31,12 @@ let currentIndex = 0;
 let images = [new Image(), new Image(), new Image()];
 let loaded = [false, false, false];
 
+const defaultMainColor = "#ffffff";
+const defaultBorderColor = "#000000";
+
+let currentMainColor = defaultMainColor;
+let currentBorderColor = defaultBorderColor;
+
 function loadPreviews() {
   previewFiles.forEach((file, i) => {
     images[i].src = "preview/" + file;
@@ -45,16 +47,68 @@ function loadPreviews() {
   });
 }
 
+function hexToRgb(hex) {
+  hex = hex.trim();
+  if (!hex.startsWith("#")) return null;
+  hex = hex.slice(1);
+  if (hex.length === 3) hex = hex.split("").map(c => c + c).join("");
+  if (hex.length !== 6) return null;
+  const num = parseInt(hex, 16);
+  if (Number.isNaN(num)) return null;
+  return {
+    r: (num >> 16) & 255,
+    g: (num >> 8) & 255,
+    b: num & 255
+  };
+}
+
 function drawPreview(i) {
   if (!loaded[i]) return;
   const img = images[i];
   const canvas = canvases[i];
   const ctx = canvas.getContext("2d");
 
-  canvas.width = img.width;
-  canvas.height = img.height;
+  const size = 256;
+  canvas.width = size;
+  canvas.height = size;
 
-  ctx.drawImage(img, 0, 0);
+  ctx.clearRect(0, 0, size, size);
+  ctx.drawImage(img, 0, 0, size, size);
+
+  const imageData = ctx.getImageData(0, 0, size, size);
+  const data = imageData.data;
+
+  const mainRgb = hexToRgb(currentMainColor) || hexToRgb(defaultMainColor);
+  const borderRgb = hexToRgb(currentBorderColor) || hexToRgb(defaultBorderColor);
+
+  for (let p = 0; p < data.length; p += 4) {
+    const r = data[p];
+    const g = data[p + 1];
+    const b = data[p + 2];
+    const a = data[p + 3];
+
+    if (a === 0) continue;
+
+    const brightness = (r + g + b) / 3;
+
+    if (brightness < 50) {
+      data[p] = borderRgb.r;
+      data[p + 1] = borderRgb.g;
+      data[p + 2] = borderRgb.b;
+    } else {
+      data[p] = (r * mainRgb.r) / 255;
+      data[p + 1] = (g * mainRgb.g) / 255;
+      data[p + 2] = (b * mainRgb.b) / 255;
+    }
+  }
+
+  ctx.putImageData(imageData, 0, 0);
+}
+
+function refreshAllPreviews() {
+  for (let i = 0; i < 3; i++) {
+    drawPreview(i);
+  }
 }
 
 function rotatePreview() {
@@ -73,9 +127,65 @@ function rotatePreview() {
 loadPreviews();
 setInterval(rotatePreview, 30000);
 
-/* ------------------------------------------------ */
-/* VERSION SELECT */
-/* ------------------------------------------------ */
+/* COLOR CONTROLS (Preferences) */
+const mainColorPicker = document.getElementById("mainColorPicker");
+const mainColorHex = document.getElementById("mainColorHex");
+const borderColorPicker = document.getElementById("borderColorPicker");
+const borderColorHex = document.getElementById("borderColorHex");
+
+const applyBtn = document.getElementById("applyBtn");
+const resetBtn = document.getElementById("resetBtn");
+
+function syncColorInputs() {
+  mainColorHex.value = mainColorPicker.value;
+  borderColorHex.value = borderColorPicker.value;
+}
+
+mainColorPicker.addEventListener("input", () => {
+  mainColorHex.value = mainColorPicker.value;
+});
+
+borderColorPicker.addEventListener("input", () => {
+  borderColorHex.value = borderColorPicker.value;
+});
+
+mainColorHex.addEventListener("change", () => {
+  if (!hexToRgb(mainColorHex.value)) {
+    mainColorHex.value = currentMainColor;
+    return;
+  }
+  mainColorPicker.value = mainColorHex.value;
+});
+
+borderColorHex.addEventListener("change", () => {
+  if (!hexToRgb(borderColorHex.value)) {
+    borderColorHex.value = currentBorderColor;
+    return;
+  }
+  borderColorPicker.value = borderColorHex.value;
+});
+
+applyBtn.onclick = () => {
+  const m = mainColorHex.value;
+  const b = borderColorHex.value;
+  if (!hexToRgb(m) || !hexToRgb(b)) return;
+  currentMainColor = m;
+  currentBorderColor = b;
+  refreshAllPreviews();
+};
+
+resetBtn.onclick = () => {
+  currentMainColor = defaultMainColor;
+  currentBorderColor = defaultBorderColor;
+  mainColorPicker.value = defaultMainColor;
+  borderColorPicker.value = defaultBorderColor;
+  syncColorInputs();
+  refreshAllPreviews();
+};
+
+syncColorInputs();
+
+/* VERSION SELECT + DOWNLOAD */
 const versionSelect = document.getElementById("versionSelect");
 const versionHint = document.getElementById("versionHint");
 const downloadBtn = document.getElementById("downloadBtn");
@@ -119,7 +229,7 @@ buildVersionOptions();
 
 function getSelectedVersion() {
   const val = versionSelect.value;
-  if (!val.includes("::")) return null;
+  if (!val || !val.includes("::")) return null;
   const [group, label] = val.split("::");
   return {
     label,
@@ -130,7 +240,10 @@ function getSelectedVersion() {
 
 versionSelect.onchange = () => {
   const sel = getSelectedVersion();
-  if (!sel) return;
+  if (!sel) {
+    versionHint.textContent = "Select a version to download its original pack.";
+    return;
+  }
   versionHint.innerHTML = `Selected: <strong>${sel.label}</strong> — File: <code>${sel.file}</code>`;
 };
 
@@ -139,3 +252,110 @@ downloadBtn.onclick = () => {
   if (!sel) return;
   window.location.href = sel.url;
 };
+
+/* BACKEND-LIKE CUSTOM ZIP GENERATION (IN BROWSER) */
+const generateBtn = document.getElementById("generateBtn");
+const backendStatus = document.getElementById("backendStatus");
+
+async function recolorPngArrayBuffer(arrayBuffer, mainHex, borderHex) {
+  const blob = new Blob([arrayBuffer], { type: "image/png" });
+  const bitmap = await createImageBitmap(blob);
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = bitmap.width;
+  canvas.height = bitmap.height;
+  ctx.drawImage(bitmap, 0, 0);
+
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
+
+  const mainRgb = hexToRgb(mainHex) || hexToRgb(defaultMainColor);
+  const borderRgb = hexToRgb(borderHex) || hexToRgb(defaultBorderColor);
+
+  for (let p = 0; p < data.length; p += 4) {
+    const r = data[p];
+    const g = data[p + 1];
+    const b = data[p + 2];
+    const a = data[p + 3];
+    if (a === 0) continue;
+
+    const brightness = (r + g + b) / 3;
+
+    if (brightness < 50) {
+      data[p] = borderRgb.r;
+      data[p + 1] = borderRgb.g;
+      data[p + 2] = borderRgb.b;
+    } else {
+      data[p] = (r * mainRgb.r) / 255;
+      data[p + 1] = (g * mainRgb.g) / 255;
+      data[p + 2] = (b * mainRgb.b) / 255;
+    }
+  }
+
+  ctx.putImageData(imageData, 0, 0);
+  return new Promise(resolve => {
+    canvas.toBlob(b => {
+      const fr = new FileReader();
+      fr.onload = () => resolve(new Uint8Array(fr.result));
+      fr.readAsArrayBuffer(b);
+    }, "image/png");
+  });
+}
+
+generateBtn.onclick = async () => {
+  const sel = getSelectedVersion();
+  if (!sel) {
+    backendStatus.textContent = "Select a base version first.";
+    return;
+  }
+
+  backendStatus.textContent = "Downloading base pack...";
+  try {
+    const resp = await fetch(sel.url);
+    if (!resp.ok) throw new Error("Download failed");
+    const buf = await resp.arrayBuffer();
+
+    backendStatus.textContent = "Recoloring textures in the browser...";
+    const zip = await JSZip.loadAsync(buf);
+    const newZip = new JSZip();
+
+    const mainHex = currentMainColor;
+    const borderHex = currentBorderColor;
+
+    const promises = [];
+
+    zip.forEach((path, file) => {
+      if (!file.dir && path.toLowerCase().endsWith(".png")) {
+        const p = file.async("arraybuffer").then(async arrayBuffer => {
+          const recolored = await recolorPngArrayBuffer(arrayBuffer, mainHex, borderHex);
+          newZip.file(path, recolored);
+        });
+        promises.push(p);
+      } else if (!file.dir) {
+        const p = file.async("arraybuffer").then(arrayBuffer => {
+          newZip.file(path, arrayBuffer);
+        });
+        promises.push(p);
+      }
+    });
+
+    await Promise.all(promises);
+
+    backendStatus.textContent = "Packing customized .zip...";
+    const outBlob = await newZip.generateAsync({ type: "blob" });
+
+    const url = URL.createObjectURL(outBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = sel.file.replace(".zip", "") + "-customized.zip";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+
+    backendStatus.textContent = "Customized pack generated.";
+  } catch (e) {
+    backendStatus.textContent = "Something went wrong while generating the customized pack.";
+  }
+}
