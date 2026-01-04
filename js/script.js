@@ -106,25 +106,28 @@ function drawPreview(i) {
     const a = data[p + 3];
     if (a === 0) continue;
 
+    // 1. Apply border tint to pure black pixels
+    if (isPureBlack(r, g, b)) {
+      r = borderRgb.r;
+      g = borderRgb.g;
+      b = borderRgb.b;
+    } else {
+      // 2. Apply main tint to everything else
+      r = (r * mainRgb.r) / 255;
+      g = (g * mainRgb.g) / 255;
+      b = (b * mainRgb.b) / 255;
+    }
+
+    // 3. Vanilla preset: brighten final result by ~40%
     if (vanillaPresetActive) {
-      // Vanilla preset = brighten by ~40% to approximate original brightness
       r = Math.min(255, Math.round(r * 1.4));
       g = Math.min(255, Math.round(g * 1.4));
       b = Math.min(255, Math.round(b * 1.4));
-      data[p] = r;
-      data[p + 1] = g;
-      data[p + 2] = b;
-    } else {
-      if (isPureBlack(r, g, b)) {
-        data[p] = borderRgb.r;
-        data[p + 1] = borderRgb.g;
-        data[p + 2] = borderRgb.b;
-      } else {
-        data[p] = (r * mainRgb.r) / 255;
-        data[p + 1] = (g * mainRgb.g) / 255;
-        data[p + 2] = (b * mainRgb.b) / 255;
-      }
     }
+
+    data[p] = r;
+    data[p + 1] = g;
+    data[p + 2] = b;
   }
 
   ctx.putImageData(imageData, 0, 0);
@@ -150,15 +153,15 @@ function rotatePreview() {
 }
 
 loadPreviews();
-/* 15 seconds instead of 30 */
+/* 15 seconds rotation */
 setInterval(rotatePreview, 15000);
 
 /* COLOR CONTROLS (Preferences) — only color pickers */
 const mainColorPicker = document.getElementById("mainColorPicker");
 const borderColorPicker = document.getElementById("borderColorPicker");
-const applyBtn = document.getElementById("applyBtn");
 const resetBtn = document.getElementById("resetBtn");
 const vanillaPresetBtn = document.getElementById("vanillaPresetBtn");
+const randomizeBtn = document.getElementById("randomizeBtn");
 
 mainColorPicker.addEventListener("input", () => {
   vanillaPresetActive = false;
@@ -172,13 +175,6 @@ borderColorPicker.addEventListener("input", () => {
   refreshAllPreviews();
 });
 
-applyBtn.onclick = () => {
-  vanillaPresetActive = false;
-  currentMainColor = mainColorPicker.value;
-  currentBorderColor = borderColorPicker.value;
-  refreshAllPreviews();
-};
-
 resetBtn.onclick = () => {
   vanillaPresetActive = false;
   currentMainColor = defaultMainColor;
@@ -189,12 +185,24 @@ resetBtn.onclick = () => {
 };
 
 vanillaPresetBtn.onclick = () => {
-  // Vanilla: brightness restore, ignore custom colors
+  // Vanilla: brightness restore as post-processing, keep current colors
   vanillaPresetActive = true;
-  currentMainColor = defaultMainColor;
-  currentBorderColor = defaultBorderColor;
-  mainColorPicker.value = defaultMainColor;
-  borderColorPicker.value = defaultBorderColor;
+  refreshAllPreviews();
+};
+
+function randomHexColor() {
+  const n = Math.floor(Math.random() * 0xffffff);
+  return "#" + n.toString(16).padStart(6, "0");
+}
+
+randomizeBtn.onclick = () => {
+  vanillaPresetActive = false;
+  const randMain = randomHexColor();
+  const randBorder = randomHexColor();
+  currentMainColor = randMain;
+  currentBorderColor = randBorder;
+  mainColorPicker.value = randMain;
+  borderColorPicker.value = randBorder;
   refreshAllPreviews();
 };
 
@@ -306,25 +314,28 @@ async function recolorPngArrayBuffer(arrayBuffer, mainHex, borderHex, vanillaMod
     const a = data[p + 3];
     if (a === 0) continue;
 
+    // 1. Apply border tint to pure black pixels
+    if (isPureBlack(r, g, b)) {
+      r = borderRgb.r;
+      g = borderRgb.g;
+      b = borderRgb.b;
+    } else {
+      // 2. Apply main tint to everything else
+      r = (r * mainRgb.r) / 255;
+      g = (g * mainRgb.g) / 255;
+      b = (b * mainRgb.b) / 255;
+    }
+
+    // 3. Vanilla brightness boost if enabled
     if (vanillaMode) {
-      // Vanilla: brighten
       r = Math.min(255, Math.round(r * 1.4));
       g = Math.min(255, Math.round(g * 1.4));
       b = Math.min(255, Math.round(b * 1.4));
-      data[p] = r;
-      data[p + 1] = g;
-      data[p + 2] = b;
-    } else {
-      if (isPureBlack(r, g, b)) {
-        data[p] = borderRgb.r;
-        data[p + 1] = borderRgb.g;
-        data[p + 2] = borderRgb.b;
-      } else {
-        data[p] = (r * mainRgb.r) / 255;
-        data[p + 1] = (g * mainRgb.g) / 255;
-        data[p + 2] = (b * mainRgb.b) / 255;
-      }
     }
+
+    data[p] = r;
+    data[p + 1] = g;
+    data[p + 2] = b;
   }
 
   ctx.putImageData(imageData, 0, 0);
