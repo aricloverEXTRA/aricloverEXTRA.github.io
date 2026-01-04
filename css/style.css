@@ -94,6 +94,25 @@ nav {
   width: 20px;
   height: 20px;
   display: block;
+  color: currentColor;
+}
+
+/* Brand colors */
+.nav-icon.curseforge img {
+  color: #F16436;
+}
+
+.nav-icon.modrinth img {
+  color: #1BD96A;
+}
+
+/* GitHub auto theme */
+.nav-icon.github img {
+  color: #000;
+}
+
+[data-theme="dark"] .nav-icon.github img {
+  color: #fff;
 }
 
 .nav-icon:hover {
