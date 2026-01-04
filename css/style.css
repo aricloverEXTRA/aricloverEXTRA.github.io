@@ -37,7 +37,7 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* NAVBAR (shrunk height) */
+/* NAVBAR */
 nav {
   position: fixed;
   top: 0;
@@ -76,7 +76,7 @@ nav {
   gap: 8px;
 }
 
-/* Icon links in navbar (Shields.io) */
+/* Local icons in navbar */
 .nav-icon {
   width: 28px;
   height: 28px;
@@ -91,8 +91,8 @@ nav {
 }
 
 .nav-icon img {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   display: block;
 }
 
@@ -271,7 +271,7 @@ canvas {
   align-items: center;
 }
 
-/* Make color inputs fully filled circles */
+/* Fully filled circular color inputs */
 .color-dot-wrapper {
   display: flex;
   flex-direction: column;
@@ -279,7 +279,6 @@ canvas {
   gap: 4px;
 }
 
-/* Remove default color input chrome */
 .color-dot-wrapper input[type="color"] {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -293,7 +292,6 @@ canvas {
   cursor: pointer;
 }
 
-/* WebKit inner swatch */
 .color-dot-wrapper input[type="color"]::-webkit-color-swatch-wrapper {
   padding: 0;
   border-radius: 999px;
@@ -304,7 +302,6 @@ canvas {
   border-radius: 999px;
 }
 
-/* Firefox inner swatch */
 .color-dot-wrapper input[type="color"]::-moz-color-swatch {
   border: none;
   border-radius: 999px;
@@ -317,7 +314,7 @@ canvas {
   color: var(--muted);
 }
 
-/* BUTTONS */
+/* Buttons */
 .btn {
   border-radius: 999px;
   padding: 7px 14px;
@@ -350,6 +347,13 @@ canvas {
   transform: translateY(-1px);
 }
 
+/* Vanilla preset "active" state */
+.btn-ghost.preset-active {
+  background: rgba(212, 175, 55, 0.18);
+  color: #000;
+}
+
+/* Button row */
 .button-row {
   display: flex;
   gap: 8px;
@@ -357,11 +361,7 @@ canvas {
   flex-wrap: wrap;
 }
 
-.wide {
-  width: auto;
-}
-
-/* VERSIONS LIST (VERTICAL, COMPACT) */
+/* Versions list */
 .version-list {
   margin-top: 10px;
   display: flex;
