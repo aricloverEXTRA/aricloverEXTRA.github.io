@@ -1,12 +1,16 @@
-/* THEME TOGGLE */
+/* THEME (default light) */
 const themeToggle = document.getElementById("themeToggle");
-document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");
+const themeIcon = document.getElementById("themeIcon");
+const storedTheme = localStorage.getItem("theme") || "light";
+document.documentElement.setAttribute("data-theme", storedTheme);
+themeIcon.textContent = storedTheme === "dark" ? "🌙" : "☀️";
 
 themeToggle.onclick = () => {
   const current = document.documentElement.getAttribute("data-theme");
   const next = current === "dark" ? "light" : "dark";
   document.documentElement.setAttribute("data-theme", next);
   localStorage.setItem("theme", next);
+  themeIcon.textContent = next === "dark" ? "🌙" : "☀️";
 };
 
 /* PREVIEW IMAGES */
@@ -86,7 +90,6 @@ function drawPreview(i) {
     const g = data[p + 1];
     const b = data[p + 2];
     const a = data[p + 3];
-
     if (a === 0) continue;
 
     const brightness = (r + g + b) / 3;
@@ -136,17 +139,21 @@ const borderColorHex = document.getElementById("borderColorHex");
 const applyBtn = document.getElementById("applyBtn");
 const resetBtn = document.getElementById("resetBtn");
 
-function syncColorInputs() {
+function syncColorInputsFromPickers() {
   mainColorHex.value = mainColorPicker.value;
   borderColorHex.value = borderColorPicker.value;
 }
 
 mainColorPicker.addEventListener("input", () => {
   mainColorHex.value = mainColorPicker.value;
+  currentMainColor = mainColorPicker.value;
+  refreshAllPreviews();
 });
 
 borderColorPicker.addEventListener("input", () => {
   borderColorHex.value = borderColorPicker.value;
+  currentBorderColor = borderColorPicker.value;
+  refreshAllPreviews();
 });
 
 mainColorHex.addEventListener("change", () => {
@@ -155,6 +162,8 @@ mainColorHex.addEventListener("change", () => {
     return;
   }
   mainColorPicker.value = mainColorHex.value;
+  currentMainColor = mainColorHex.value;
+  refreshAllPreviews();
 });
 
 borderColorHex.addEventListener("change", () => {
@@ -163,14 +172,16 @@ borderColorHex.addEventListener("change", () => {
     return;
   }
   borderColorPicker.value = borderColorHex.value;
+  currentBorderColor = borderColorHex.value;
+  refreshAllPreviews();
 });
 
 applyBtn.onclick = () => {
-  const m = mainColorHex.value;
-  const b = borderColorHex.value;
-  if (!hexToRgb(m) || !hexToRgb(b)) return;
-  currentMainColor = m;
-  currentBorderColor = b;
+  if (!hexToRgb(mainColorHex.value) || !hexToRgb(borderColorHex.value)) return;
+  currentMainColor = mainColorHex.value;
+  currentBorderColor = borderColorHex.value;
+  mainColorPicker.value = currentMainColor;
+  borderColorPicker.value = currentBorderColor;
   refreshAllPreviews();
 };
 
@@ -179,17 +190,13 @@ resetBtn.onclick = () => {
   currentBorderColor = defaultBorderColor;
   mainColorPicker.value = defaultMainColor;
   borderColorPicker.value = defaultBorderColor;
-  syncColorInputs();
+  syncColorInputsFromPickers();
   refreshAllPreviews();
 };
 
-syncColorInputs();
+syncColorInputsFromPickers();
 
-/* VERSION SELECT + DOWNLOAD */
-const versionSelect = document.getElementById("versionSelect");
-const versionHint = document.getElementById("versionHint");
-const downloadBtn = document.getElementById("downloadBtn");
-
+/* VERSION DATA (used for base + customization) */
 const versionFiles = {
   "Mainline (1.19.0+)": {
     "2026.1.1": "Default-Dark-Mode-Expansion-1.19.0+-2026.1.1.zip",
@@ -203,53 +210,70 @@ const versionFiles = {
     "2025.4.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.4.1.zip",
     "2025.3.25": "Default-Dark-Mode-Expansion-1.19.0+-2025.3.25.zip"
   },
-
   "Legacy (1.18.2)": {
     "2025.3.25": "Default-Dark-Mode-Expansion-1.18.0+1.18.2-2025.3.25.zip"
   },
-
   "Legacy (1.12.2)": {
     "2025.10.31": "Default-Dark-Mode-Expansion-1.12.x-2025.10.31.zip"
   }
 };
 
-function buildVersionOptions() {
+/* VERSIONS UI (VERTICAL LIST) */
+const versionListEl = document.getElementById("versionList");
+const versionHint = document.getElementById("versionHint");
+const downloadBtn = document.getElementById("downloadBtn");
+let selectedVersionKey = null;
+
+function buildVersionList() {
   let html = "";
   for (const group in versionFiles) {
-    html += `<optgroup label="${group}">`;
-    for (const label in versionFiles[group]) {
-      html += `<option value="${group}::${label}">${label}</option>`;
+    html += `<div class="version-group-label">${group}</div>`;
+    const entries = versionFiles[group];
+    for (const label in entries) {
+      const key = `${group}::${label}`;
+      html += `
+        <div class="version-item" data-key="${key}">
+          <div class="version-label">${label}</div>
+          <div class="version-meta">${entries[label]}</div>
+        </div>
+      `;
     }
-    html += `</optgroup>`;
   }
-  versionSelect.innerHTML = html;
+  versionListEl.innerHTML = html;
+
+  const items = Array.from(document.querySelectorAll(".version-item"));
+  items.forEach(item => {
+    item.addEventListener("click", () => {
+      items.forEach(i => i.classList.remove("selected"));
+      item.classList.add("selected");
+      selectedVersionKey = item.getAttribute("data-key");
+      const [group, label] = selectedVersionKey.split("::");
+      const file = versionFiles[group][label];
+      versionHint.innerHTML = `Selected: <strong>${label}</strong> — File: <code>${file}</code>`;
+    });
+  });
 }
 
-buildVersionOptions();
+buildVersionList();
 
 function getSelectedVersion() {
-  const val = versionSelect.value;
-  if (!val || !val.includes("::")) return null;
-  const [group, label] = val.split("::");
+  if (!selectedVersionKey) return null;
+  const [group, label] = selectedVersionKey.split("::");
+  const file = versionFiles[group][label];
   return {
+    group,
     label,
-    file: versionFiles[group][label],
-    url: "releases/" + versionFiles[group][label]
+    file,
+    url: "releases/" + file
   };
 }
 
-versionSelect.onchange = () => {
-  const sel = getSelectedVersion();
-  if (!sel) {
-    versionHint.textContent = "Select a version to download its original pack.";
-    return;
-  }
-  versionHint.innerHTML = `Selected: <strong>${sel.label}</strong> — File: <code>${sel.file}</code>`;
-};
-
 downloadBtn.onclick = () => {
   const sel = getSelectedVersion();
-  if (!sel) return;
+  if (!sel) {
+    versionHint.textContent = "Select a version above first.";
+    return;
+  }
   window.location.href = sel.url;
 };
 
@@ -358,4 +382,4 @@ generateBtn.onclick = async () => {
   } catch (e) {
     backendStatus.textContent = "Something went wrong while generating the customized pack.";
   }
-}
+};
