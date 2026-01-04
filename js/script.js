@@ -44,6 +44,7 @@ let currentBorderColor = defaultBorderColor;
 /* Vanilla preset flag */
 let vanillaPresetActive = false;
 
+/* PREVIEW LOADING */
 function loadPreviews() {
   previewFiles.forEach((file, i) => {
     images[i].src = "preview/" + file;
@@ -69,7 +70,6 @@ function hexToRgb(hex) {
   };
 }
 
-/* Only treat pixels that are exactly #000000 as "border" */
 function isPureBlack(r, g, b) {
   return r === 0 && g === 0 && b === 0;
 }
@@ -84,7 +84,7 @@ function drawPreview(i) {
   const cropWidth = 176;
   const cropHeight = 166;
   const sourceWidth = img.width || 256;
-  const startX = Math.max(0, sourceWidth - cropWidth); // top-right crop
+  const startX = Math.max(0, sourceWidth - cropWidth);
   const startY = 0;
 
   canvas.width = cropWidth;
@@ -153,40 +153,36 @@ function rotatePreview() {
 }
 
 loadPreviews();
-/* 15 seconds rotation */
 setInterval(rotatePreview, 15000);
 
-/* COLOR CONTROLS (Preferences) — only color pickers */
+/* COLOR CONTROLS */
 const mainColorPicker = document.getElementById("mainColorPicker");
 const borderColorPicker = document.getElementById("borderColorPicker");
-const resetBtn = document.getElementById("resetBtn");
 const vanillaPresetBtn = document.getElementById("vanillaPresetBtn");
 const randomizeBtn = document.getElementById("randomizeBtn");
 
 mainColorPicker.addEventListener("input", () => {
   vanillaPresetActive = false;
+  vanillaPresetBtn.classList.remove("preset-active");
   currentMainColor = mainColorPicker.value;
   refreshAllPreviews();
 });
 
 borderColorPicker.addEventListener("input", () => {
   vanillaPresetActive = false;
+  vanillaPresetBtn.classList.remove("preset-active");
   currentBorderColor = borderColorPicker.value;
   refreshAllPreviews();
 });
 
-resetBtn.onclick = () => {
-  vanillaPresetActive = false;
-  currentMainColor = defaultMainColor;
-  currentBorderColor = defaultBorderColor;
-  mainColorPicker.value = defaultMainColor;
-  borderColorPicker.value = defaultBorderColor;
-  refreshAllPreviews();
-};
-
 vanillaPresetBtn.onclick = () => {
-  // Vanilla: brightness restore as post-processing, keep current colors
-  vanillaPresetActive = true;
+  // Toggle Vanilla preset
+  vanillaPresetActive = !vanillaPresetActive;
+  if (vanillaPresetActive) {
+    vanillaPresetBtn.classList.add("preset-active");
+  } else {
+    vanillaPresetBtn.classList.remove("preset-active");
+  }
   refreshAllPreviews();
 };
 
@@ -197,12 +193,17 @@ function randomHexColor() {
 
 randomizeBtn.onclick = () => {
   vanillaPresetActive = false;
+  vanillaPresetBtn.classList.remove("preset-active");
+
   const randMain = randomHexColor();
   const randBorder = randomHexColor();
+
   currentMainColor = randMain;
   currentBorderColor = randBorder;
+
   mainColorPicker.value = randMain;
   borderColorPicker.value = randBorder;
+
   refreshAllPreviews();
 };
 
@@ -228,13 +229,16 @@ const versionFiles = {
   }
 };
 
-/* VERSIONS UI (VERTICAL LIST) */
+/* VERSIONS UI */
 const versionListEl = document.getElementById("versionList");
 const versionHint = document.getElementById("versionHint");
 const downloadBtn = document.getElementById("downloadBtn");
+const generateBtn = document.getElementById("generateBtn");
+const backendStatus = document.getElementById("backendStatus");
 let selectedVersionKey = null;
 
 function buildVersionList() {
+  if (!versionListEl) return;
   let html = "";
   for (const group in versionFiles) {
     html += `<div class="version-group-label">${group}</div>`;
@@ -287,10 +291,7 @@ downloadBtn.onclick = () => {
   window.location.href = sel.url;
 };
 
-/* BACKEND-LIKE CUSTOM ZIP GENERATION (IN BROWSER) */
-const generateBtn = document.getElementById("generateBtn");
-const backendStatus = document.getElementById("backendStatus");
-
+/* ZIP GENERATION */
 async function recolorPngArrayBuffer(arrayBuffer, mainHex, borderHex, vanillaMode) {
   const blob = new Blob([arrayBuffer], { type: "image/png" });
   const bitmap = await createImageBitmap(blob);
@@ -314,19 +315,16 @@ async function recolorPngArrayBuffer(arrayBuffer, mainHex, borderHex, vanillaMod
     const a = data[p + 3];
     if (a === 0) continue;
 
-    // 1. Apply border tint to pure black pixels
     if (isPureBlack(r, g, b)) {
       r = borderRgb.r;
       g = borderRgb.g;
       b = borderRgb.b;
     } else {
-      // 2. Apply main tint to everything else
       r = (r * mainRgb.r) / 255;
       g = (g * mainRgb.g) / 255;
       b = (b * mainRgb.b) / 255;
     }
 
-    // 3. Vanilla brightness boost if enabled
     if (vanillaMode) {
       r = Math.min(255, Math.round(r * 1.4));
       g = Math.min(255, Math.round(g * 1.4));
