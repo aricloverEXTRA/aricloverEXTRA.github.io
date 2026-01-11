@@ -81,16 +81,16 @@ nav {
   align-items: center;
   gap: 6px;
 
-  padding: 6px 10px;
+  padding: 3px 8px;
   border-radius: 999px;
 
   background: var(--glass);
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(14px);
 
   border: 1px solid var(--border);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 
-  transition: background 0.2s ease, border-color 0.2s ease;
+  height: 34px;
 }
 
 [data-theme="dark"] .nav-social-pill {
