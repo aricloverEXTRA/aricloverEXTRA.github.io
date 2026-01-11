@@ -208,24 +208,55 @@ randomizeBtn.onclick = () => {
 /* VERSION DATA */
 const versionFiles = {
   "Mainline (1.19.0+)": {
-    "2026.1.1": "Default-Dark-Mode-Expansion-1.19.0+-2026.1.1.zip",
-    "2025.10.31": "Default-Dark-Mode-Expansion-1.19.0+-2025.10.31.zip",
-    "2025.10.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.10.1.zip",
-    "2025.8.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.8.1.zip",
-    "2025.7.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.7.1.zip",
-    "2025.6.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.6.1.zip",
-    "2025.5.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.5.1.zip",
-    "2025.4.5": "Default-Dark-Mode-Expansion-1.19.0+-2025.4.5.zip",
-    "2025.4.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.4.1.zip",
-    "2025.3.25": "Default-Dark-Mode-Expansion-1.19.0+-2025.3.25.zip",
-    "2024.11.10": "Default-Dark-Mode-Expansion-1.19.0+-2024.11.10.zip",
-    "2024.9.12": "Default-Dark-Mode-Expansion-1.19.0+-2024.9.12.zip"   
+    "2026.1.1": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2026.1.1.zip",
+      changelog: "changelogs/2026.1.1.txt"
+    },
+    "2025.10.31": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.10.31.zip",
+      changelog: "changelogs/2025.10.31.txt"
+    },
+    "2025.10.1": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.10.1.zip"
+    },
+    "2025.8.1": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.8.1.zip"
+    },
+    "2025.7.1": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.7.1.zip"
+    },
+    "2025.6.1": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.6.1.zip"
+    },
+    "2025.5.1": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.5.1.zip"
+    },
+    "2025.4.5": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.4.5.zip"
+    },
+    "2025.4.1": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.4.1.zip"
+    },
+    "2025.3.25": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.3.25.zip"
+    },
+    "2024.11.10": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2024.11.10.zip"
+    },
+    "2024.9.12": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2024.9.12.zip"
+    }
   },
   "Legacy (1.18.2)": {
-    "2025.3.25": "Default-Dark-Mode-Expansion-1.18.0+1.18.2-2025.3.25.zip"
+    "2025.3.25": {
+      file: "Default-Dark-Mode-Expansion-1.18.0+1.18.2-2025.3.25.zip"
+    }
   },
   "Legacy (1.12.2)": {
-    "2025.10.31": "Default-Dark-Mode-Expansion-1.12.x-2025.10.31.zip"
+    "2025.10.31": {
+      file: "Default-Dark-Mode-Expansion-1.12.x-2025.10.31.zip",
+      changelog: "changelogs/1.12.2-2025.10.31.txt"
+    }
   }
 };
 
@@ -240,15 +271,25 @@ let selectedVersionKey = null;
 function buildVersionList() {
   if (!versionListEl) return;
   let html = "";
+
   for (const group in versionFiles) {
     html += `<div class="version-group-label">${group}</div>`;
     const entries = versionFiles[group];
     for (const label in entries) {
+      const entry = entries[label];
       const key = `${group}::${label}`;
+
+      const changelogBtn = entry.changelog
+        ? `<button class="changelog-btn" data-changelog="${entry.changelog}" data-version="${label}">
+             View Full Changelog
+           </button>`
+        : "";
+
       html += `
         <div class="version-item" data-key="${key}">
           <div class="version-label">${label}</div>
-          <div class="version-meta">${entries[label]}</div>
+          <div class="version-meta">${entry.file}</div>
+          ${changelogBtn}
         </div>
       `;
     }
@@ -262,10 +303,54 @@ function buildVersionList() {
       item.classList.add("selected");
       selectedVersionKey = item.getAttribute("data-key");
       const [group, label] = selectedVersionKey.split("::");
-      const file = versionFiles[group][label];
-      versionHint.innerHTML = `Selected: <strong>${label}</strong> — <code>${file}</code>`;
+      const entry = versionFiles[group][label];
+      versionHint.innerHTML = `Selected: <strong>${label}</strong> — <code>${entry.file}</code>`;
     });
   });
+
+  // Changelog modal logic
+  const modal = document.getElementById("changelogModal");
+  const closeBtn = document.getElementById("closeChangelog");
+  const titleEl = document.getElementById("changelogTitle");
+  const textEl = document.getElementById("changelogText");
+
+  const changelogButtons = document.querySelectorAll(".changelog-btn");
+  changelogButtons.forEach(btn => {
+    btn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+
+      const url = btn.getAttribute("data-changelog");
+      const version = btn.getAttribute("data-version");
+
+      try {
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error("Missing changelog");
+        const text = await resp.text();
+
+        titleEl.textContent = `Changelog — ${version}`;
+        textEl.textContent = text;
+        modal.style.display = "flex";
+      } catch {
+        titleEl.textContent = `Changelog — ${version}`;
+        textEl.textContent = "No changelog available.";
+        modal.style.display = "flex";
+      }
+    });
+  });
+
+  if (closeBtn) {
+    closeBtn.onclick = () => {
+      modal.style.display = "none";
+    };
+  }
+
+  if (modal) {
+    modal.onclick = (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+  }
 }
 
 buildVersionList();
@@ -273,12 +358,12 @@ buildVersionList();
 function getSelectedVersion() {
   if (!selectedVersionKey) return null;
   const [group, label] = selectedVersionKey.split("::");
-  const file = versionFiles[group][label];
+  const entry = versionFiles[group][label];
   return {
     group,
     label,
-    file,
-    url: "releases/" + file
+    file: entry.file,
+    url: "releases/" + entry.file
   };
 }
 
