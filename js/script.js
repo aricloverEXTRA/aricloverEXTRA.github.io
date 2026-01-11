@@ -217,7 +217,9 @@ const versionFiles = {
     "2025.5.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.5.1.zip",
     "2025.4.5": "Default-Dark-Mode-Expansion-1.19.0+-2025.4.5.zip",
     "2025.4.1": "Default-Dark-Mode-Expansion-1.19.0+-2025.4.1.zip",
-    "2025.3.25": "Default-Dark-Mode-Expansion-1.19.0+-2025.3.25.zip"
+    "2025.3.25": "Default-Dark-Mode-Expansion-1.19.0+-2025.3.25.zip",
+    "2024.11.10": "Default-Dark-Mode-Expansion-1.19.0+-2024.11.10.zip",
+    "2024.9.12": "Default-Dark-Mode-Expansion-1.19.0+-2024.9.12.zip"   
   },
   "Legacy (1.18.2)": {
     "2025.3.25": "Default-Dark-Mode-Expansion-1.18.0+1.18.2-2025.3.25.zip"
