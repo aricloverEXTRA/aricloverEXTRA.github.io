@@ -76,6 +76,27 @@ nav {
   gap: 8px;
 }
 
+.nav-social-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  background: var(--glass);
+  backdrop-filter: blur(18px);
+
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+[data-theme="dark"] .nav-social-pill {
+  background: rgba(10, 12, 20, 0.55);
+}
+
 /* Local icons in navbar */
 .nav-icon {
   width: 28px;
@@ -117,7 +138,7 @@ nav {
 
 .nav-icon:hover {
   border-color: var(--border);
-  background: rgba(212, 175, 55, 0.12);
+  background: rgba(212, 175, 55, 0.10);
   transform: translateY(-1px);
 }
 
