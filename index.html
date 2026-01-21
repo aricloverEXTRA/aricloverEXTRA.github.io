@@ -1,8 +1,172 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta http-equiv="refresh" content="0; url=https://arichornlover.github.io">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Darkomizer — Default Dark Mode: Expansion</title>
+  <link rel="icon" type="image/png" href="pack.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
 </head>
 <body>
+<nav class="site-nav" role="navigation" aria-label="Main">
+  <div class="nav-left">
+    <img src="pack.png" alt="Expansion Logo" class="logo" />
+    <div class="nav-title">Darkomizer — Default Dark Mode: Expansion</div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-social-pill" aria-hidden="false">
+      <a class="nav-icon curseforge" href="https://www.curseforge.com/minecraft/texture-packs/default-dark-mode-expansion" target="_blank" rel="noopener" title="CurseForge">
+        <img src="icons/curseforge.svg" alt="CurseForge" />
+      </a>
+      <a class="nav-icon modrinth" href="https://modrinth.com/resourcepack/default-dark-mode-expansion" target="_blank" rel="noopener" title="Modrinth">
+        <img src="icons/modrinth.svg" alt="Modrinth" />
+      </a>
+      <a class="nav-icon pmc" href="https://www.planetminecraft.com/texture-pack/default-dark-mode-expansion-1-19-1-21/" target="_blank" rel="noopener" title="Planet Minecraft">
+        <img src="icons/pmc.svg" alt="Planet Minecraft" />
+      </a>
+      <a class="nav-icon github" href="https://github.com/aricloverEXTRA/Default-Dark-Mode-Expansion" target="_blank" rel="noopener" title="GitHub">
+        <img src="icons/github.svg" alt="GitHub" />
+      </a>
+    </div>
+    <button id="themeToggle" class="icon-btn" aria-label="Toggle theme" title="Toggle theme">
+      <span id="themeIcon">☀️</span>
+    </button>
+  </div>
+</nav>
+<header class="hero">
+  <div class="hero-inner">
+    <h1>Darkomizer</h1>
+    <p class="muted">Customize and create a colorized Default Dark Mode: Expansion resource pack.</p>
+  </div>
+</header>
+<main class="page" id="main">
+  <div class="layout-main">
+    <div class="column column-left">
+      <section class="card preview-card" aria-labelledby="preview-heading">
+        <div class="preview-head">
+          <div class="preview-title">
+            <h2 id="preview-heading">GUI preview</h2>
+            <p class="muted">Live preview of how the GUI will look with chosen colors.</p>
+          </div>
+          <button id="rotateBtn" class="btn btn-ghost rotate-btn" title="Rotate preview" aria-label="Rotate preview">⟳</button>
+        </div>
+        <div class="preview-wrapper" aria-live="polite">
+          <div class="preview-carousel" id="previewCarousel">
+            <div class="preview-slide active" id="slide0">
+              <canvas id="canvas0" aria-hidden="false" role="img" alt="Preview 0"></canvas>
+            </div>
+            <div class="preview-slide hidden-right" id="slide1">
+              <canvas id="canvas1" aria-hidden="true" role="img" alt="Preview 1"></canvas>
+            </div>
+            <div class="preview-slide hidden-right" id="slide2">
+              <canvas id="canvas2" aria-hidden="true" role="img" alt="Preview 2"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="preview-footer small muted">
+          <span id="previewLabel">Inventory</span>
+          <span class="preview-hint"> • Swipe left/right to change</span>
+        </div>
+      </section>
+      <section class="card versions-card" aria-labelledby="versions-heading">
+        <h2 id="versions-heading">Base versions</h2>
+        <p class="muted">Pick a base version of Default Dark Mode: Expansion. Tap the changelog icon to view details.</p>
+        <div class="version-list" id="versionList"></div>
+        <div class="version-actions">
+          <button class="btn btn-ghost" id="downloadBtn">Download base</button>
+          <div class="version-hint" id="versionHint">Select a version above to download or use as the base.</div>
+        </div>
+      </section>
+    </div>
+    <div class="column column-right">
+      <section class="card prefs-card" aria-labelledby="prefs-heading">
+        <div class="prefs-header">
+          <h2 id="prefs-heading">Preferences</h2>
+          <div class="muted small">Colors, presets and pack generation</div>
+        </div>
+        <p class="muted">Customize the GUI tint and border color. Text colors are not customizable in this pack.</p>
+        <div class="control-group compact">
+          <label>Presets</label>
+          <div class="preset-row">
+            <button class="btn btn-ghost" id="vanillaPresetBtn" title="Vanilla appearance">Vanilla</button>
+            <button class="btn btn-ghost" id="resetBtn" title="Reset colors">Reset</button>
+          </div>
+        </div>
+        <div class="control-group compact">
+          <label>Colors</label>
+          <div class="color-dot-row">
+            <div class="color-dot-wrapper" title="Main color">
+              <div class="color-picker" role="button" aria-label="Main color picker">
+                <div id="mainColorFill" class="color-fill" tabindex="0"></div>
+                <input type="color" id="mainColorPicker" value="#ffffff" aria-label="Main color input" />
+              </div>
+              <div class="color-meta">
+                <span class="color-dot-label">Main</span>
+                <button class="btn btn-ghost tiny" id="copyMainBtn" title="Copy hex">Copy</button>
+              </div>
+            </div>
+            <div class="color-dot-wrapper" title="Border color">
+              <div class="color-picker" role="button" aria-label="Border color picker">
+                <div id="borderColorFill" class="color-fill" tabindex="0"></div>
+                <input type="color" id="borderColorPicker" value="#000000" aria-label="Border color input" />
+              </div>
+              <div class="color-meta">
+                <span class="color-dot-label">Border</span>
+                <button class="btn btn-ghost tiny" id="copyBorderBtn" title="Copy hex">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="control-group compact">
+          <label>Actions</label>
+          <div class="button-row">
+            <button class="btn btn-primary" id="generateBtn">Generate customized pack</button>
+            <button class="btn btn-ghost" id="randomizeBtn">Randomize</button>
+          </div>
+        </div>
+        <div id="backendStatus" class="muted small">Uses the selected base version and applies your colors in the browser.</div>
+      </section>
+      <section class="card about-card">
+        <h3>About</h3>
+        <p class="muted">Darkomizer tweaks textures in-browser and produces a downloadable zip. No uploads or servers required.</p>
+      </section>
+    </div>
+  </div>
+</main>
+<div class="kcb-banner">
+  <div class="kcb-inner">
+    <a class="kcb-link" href="https://kcbhosting.com/aff/aric" target="_blank" rel="noopener sponsored">
+      <img class="kcb-logo" src="https://cdn.modrinth.com/data/cached_images/7ad4c2e05801b95ec8fd7f1bfc02a170412603b6.png" alt="KCB Hosting Banner">
+    </a>
+    <div class="kcb-info">
+      <div class="kcb-title">Partnered with KCB Hosting</div>
+    </div>
+  </div>
+</div>
+<div id="changelogModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="changelogTitle">
+  <div class="modal-content">
+    <header class="modal-header">
+      <h2 id="changelogTitle">Changelog</h2>
+      <div class="modal-actions">
+        <a id="changelogDownload" class="btn btn-ghost small" target="_blank" rel="noopener">Open raw</a>
+        <button id="copyChangelog" class="btn btn-ghost small">Copy</button>
+        <button id="closeChangelog" class="close" aria-label="Close changelog">&times;</button>
+      </div>
+    </header>
+    <main class="modal-body">
+      <div id="changelogText" class="changelog-pre"></div>
+    </main>
+  </div>
+</div>
+<footer>
+  Built for Default Dark Mode: Expansion.
+</footer>
+<script src="js/script.js"></script>
 </body>
 </html>

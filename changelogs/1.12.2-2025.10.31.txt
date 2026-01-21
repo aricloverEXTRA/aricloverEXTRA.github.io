@@ -1,0 +1,16 @@
+- ✨ Added support for [AbyssalCraft](https://www.curseforge.com/minecraft/mc-mods/abyssalcraft) **(1.12.x)**
+- ✨ Added support for [Advancement Plaques](https://github.com/AHilyard/AdvancementPlaques) **(1.12, 1.15+)**
+- ✨ Added support for [Baubles](https://www.curseforge.com/minecraft/mc-mods/baubles) **(1.12.x)**
+- ✨ Added support for [Blood Magic](https://www.curseforge.com/minecraft/mc-mods/blood-magic) **(1.12.x)**
+- ✨ Added support for [Cosmetic Armor Reworked](https://legacy.curseforge.com/minecraft/mc-mods/cosmetic-armor-reworked) **(1.9+)**
+- ✨ Added support for [Ender IO](https://www.curseforge.com/minecraft/mc-mods/ender-io) **(1.12.x)**
+- ✨ Added support for [Galacticraft Legacy](https://www.curseforge.com/minecraft/mc-mods/galacticraft-legacy) **(1.12.x)**
+- ✨ Added support for [Industrial Foregoing](https://modrinth.com/mod/industrial-foregoing) **(1.12+)**
+- ✨ Added support for [JEI](https://modrinth.com/mod/jei) **(1.12.x)**
+- ✨ Added support for [MineColonies](https://www.curseforge.com/minecraft/mc-mods/minecolonies) **(1.12.x)**
+- ✨ Added support for [ProjectE](https://www.curseforge.com/minecraft/mc-mods/projecte) **(ALL)**
+- ✨ Added support for [Storage Drawers](https://modrinth.com/mod/storagedrawers) **(1.12, 1.14+)**
+- ✨ Added support for [Thaumcraft](https://www.curseforge.com/minecraft/mc-mods/thaumcraft) **(1.12.x)**
+- ✨ Added support for [XNet](https://modrinth.com/mod/xnet) **(1.12+)**
+
+NOTE: CONTAINS ALL OF THE CHANGES FROM PREVIOUS 1.12 VERSIONS OF THE RESOURCE PACK!
