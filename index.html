@@ -74,8 +74,12 @@
           <span class="preview-hint"> • Swipe left/right to change</span>
         </div>
       </section>
-      <section class="card versions-filter-card" aria-labelledby="versions-filter-heading">
-        <h2 id="versions-filter-heading">Version filter</h2>
+    <section class="card versions-filter-card" aria-labelledby="versions-filter-heading">
+      <div class="filter-toggle" id="filterToggle">
+        <span>Version filter</span>
+        <span class="filter-toggle-icon">▼</span>
+      </div>
+      <div class="filter-container" id="filterContainer">
         <p class="muted small">Filter releases by specific Minecraft versions.</p>
         <div class="filter-section">
           <div class="filter-label small muted">Classic versions</div>
@@ -136,7 +140,8 @@
         <div class="filter-actions">
           <button class="btn btn-ghost small" id="clearFiltersBtn">Clear filters</button>
         </div>
-      </section>
+      </div>
+    </section>
       <section class="card versions-card" aria-labelledby="versions-heading">
         <h2 id="versions-heading">Base versions</h2>
         <p class="muted">Pick a base version of Default Dark Mode: Expansion. Tap the changelog icon to view details.</p>
