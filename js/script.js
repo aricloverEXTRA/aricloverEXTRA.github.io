@@ -249,154 +249,425 @@ copyBorderBtn?.addEventListener("click", async () => {
     setTimeout(() => (copyBorderBtn.textContent = "Copy"), 1200);
   }
 });
-const mcVersionsOrderedAsc = [
+const classicVersions = [
   "1.12.0","1.12.1","1.12.2",
+  "1.16.0","1.16.1","1.16.2","1.16.3","1.16.4","1.16.5",
   "1.18.0","1.18.1","1.18.2",
   "1.19.0","1.19.1","1.19.2","1.19.3","1.19.4",
   "1.20.0","1.20.1","1.20.2","1.20.3","1.20.4","1.20.5","1.20.6",
   "1.21.0","1.21.1","1.21.2","1.21.3","1.21.4","1.21.5","1.21.6","1.21.7","1.21.8","1.21.9","1.21.10","1.21.11"
 ];
-const majorIndexMap = {};
-mcVersionsOrderedAsc.forEach((v, idx) => {
+
+const yearVersions = [
+  "26.1",
+  "26.2",
+  "26.3",
+  "26.4"
+];
+
+const mcVersionsOrderedAsc = [...classicVersions, ...yearVersions];
+
+const classicMajorIndexMap = {};
+classicVersions.forEach((v, idx) => {
   const parts = v.split(".");
   const majorMinor = parts[0] + "." + parts[1];
-  if (!majorIndexMap[majorMinor]) majorIndexMap[majorMinor] = { first: idx, last: idx };
-  else majorIndexMap[majorMinor].last = idx;
+  if (!classicMajorIndexMap[majorMinor]) classicMajorIndexMap[majorMinor] = { first: idx, last: idx };
+  else classicMajorIndexMap[majorMinor].last = idx;
 });
-function makeSupportedSet(spec) {
+
+const yearDropIndexMap = {};
+yearVersions.forEach((v, idx) => {
+  const parts = v.split(".");
+  const dropKey = parts[0] + "." + parts[1];
+  if (!yearDropIndexMap[dropKey]) yearDropIndexMap[dropKey] = [];
+  yearDropIndexMap[dropKey].push(idx + classicVersions.length);
+});
+
+function isClassicVersion(v) {
+  return v.startsWith("1.");
+}
+
+function isYearVersion(v) {
+  return v.startsWith("26.");
+}
+
+function makeClassicSupportedSet(spec) {
   const set = new Set();
-  if (Array.isArray(spec)) {
-    spec.forEach(s => set.add(s));
+  if (typeof spec !== "string") return set;
+
+  let m = spec.match(/^(\d+\.\d+)\.x$/);
+  if (m) {
+    const major = m[1];
+    const range = classicMajorIndexMap[major];
+    if (!range) return set;
+    for (let i = range.first; i <= range.last; i++) set.add(classicVersions[i]);
     return set;
   }
-  if (typeof spec === "string") {
-    const m = spec.match(/^(\d+\.\d+)\.x-(\d+\.\d+)\.x$/);
-    if (m) {
-      const startMajor = m[1];
-      const endMajor = m[2];
-      const startIdx = majorIndexMap[startMajor]?.first ?? 0;
-      const endIdx = majorIndexMap[endMajor]?.last ?? (mcVersionsOrderedAsc.length - 1);
-      for (let i = startIdx; i <= endIdx; i++) set.add(mcVersionsOrderedAsc[i]);
-      return set;
-    }
-    const m2 = spec.match(/^(\d+\.\d+)\.x-(\d+\.\d+)\.(\d+)$/);
-    if (m2) {
-      const startMajor = m2[1];
-      const endMajor = m2[2];
-      const endPatch = parseInt(m2[3], 10);
-      const startIdx = majorIndexMap[startMajor]?.first ?? 0;
-      const endMajorIndices = mcVersionsOrderedAsc.map((v,i)=>({v,i})).filter(o=>o.v.startsWith(endMajor + "."));
-      let endIdx = endMajorIndices.find(o => {
-        const parts = o.v.split(".");
-        return parseInt(parts[2],10) === endPatch;
-      })?.i ?? (majorIndexMap[endMajor]?.last ?? (mcVersionsOrderedAsc.length - 1));
-      for (let i = startIdx; i <= endIdx; i++) set.add(mcVersionsOrderedAsc[i]);
-      return set;
-    }
+
+  m = spec.match(/^(\d+\.\d+)\.x-(\d+\.\d+)\.x$/);
+  if (m) {
+    const startMajor = m[1];
+    const endMajor = m[2];
+    const startIdx = classicMajorIndexMap[startMajor]?.first ?? 0;
+    const endIdx = classicMajorIndexMap[endMajor]?.last ?? (classicVersions.length - 1);
+    for (let i = startIdx; i <= endIdx; i++) set.add(classicVersions[i]);
+    return set;
   }
+
+  m = spec.match(/^(\d+\.\d+)\.x-(\d+\.\d+)\.(\d+)$/);
+  if (m) {
+    const startMajor = m[1];
+    const endMajor = m[2];
+    const endPatch = parseInt(m[3], 10);
+    const startIdx = classicMajorIndexMap[startMajor]?.first ?? 0;
+
+    const endMajorIndices = classicVersions
+      .map((v, i) => ({ v, i }))
+      .filter(o => o.v.startsWith(endMajor + "."));
+    let endIdx = endMajorIndices.find(o => {
+      const parts = o.v.split(".");
+      return parseInt(parts[2], 10) === endPatch;
+    })?.i ?? (classicMajorIndexMap[endMajor]?.last ?? (classicVersions.length - 1));
+
+    for (let i = startIdx; i <= endIdx; i++) set.add(classicVersions[i]);
+    return set;
+  }
+
   return set;
 }
-const versionFiles = {
-  "Mainline (1.19.0+)": {
-    "2026.1.1": { file: "Default-Dark-Mode-Expansion-1.19.0+-2026.1.1.zip", changelog: "changelogs/2026.1.1.txt", supportedSpec: "1.19.x-1.21.x" },
-    "2025.10.31": { file: "Default-Dark-Mode-Expansion-1.19.0+-2025.10.31.zip", changelog: "changelogs/2025.10.31.txt", supportedSpec: "1.19.x-1.21.10" },
-    "2025.10.1": { file: "Default-Dark-Mode-Expansion-1.19.0+-2025.10.1.zip", supportedSpec: "1.19.x-1.21.8" },
-    "2025.8.1": { file: "Default-Dark-Mode-Expansion-1.19.0+-2025.8.1.zip", supportedSpec: "1.19.x-1.21.8" },
-    "2025.7.1": { file: "Default-Dark-Mode-Expansion-1.19.0+-2025.7.1.zip", supportedSpec: "1.19.x-1.21.8" },
-    "2025.6.1": { file: "Default-Dark-Mode-Expansion-1.19.0+-2025.6.1.zip", supportedSpec: "1.19.x-1.21.6" },
-    "2025.5.1": { file: "Default-Dark-Mode-Expansion-1.19.0+-2025.5.1.zip", supportedSpec: "1.19.x-1.21.5" },
-    "2025.4.5": { file: "Default-Dark-Mode-Expansion-1.19.0+-2025.4.5.zip", supportedSpec: "1.19.x-1.21.5" },
-    "2025.4.1": { file: "Default-Dark-Mode-Expansion-1.19.0+-2025.4.1.zip", supportedSpec: "1.19.x-1.21.5" },
-    "2025.3.25": { file: "Default-Dark-Mode-Expansion-1.19.0+-2025.3.25.zip", supportedSpec: "1.19.x-1.21.5" },
-    "2024.11.10": { file: "Default-Dark-Mode-Expansion-1.19.0+-2024.11.10.zip", supportedSpec: "1.19.x-1.21.3" },
-    "2024.9.12": { file: "Default-Dark-Mode-Expansion-1.19.0+-2024.9.12.zip", supportedSpec: "1.19.x-1.21.1" }
-  },
-  "Legacy (1.18.2)": {
-    "2025.3.25": { file: "Default-Dark-Mode-Expansion-1.18.0+1.18.2-2025.3.25.zip", supportedSpec: "1.18.x" }
-  },
-  "Legacy (1.12.2)": {
-    "2025.10.31": { file: "Default-Dark-Mode-Expansion-1.12.x-2025.10.31.zip", changelog: "changelogs/1.12.2-2025.10.31.txt", supportedSpec: "1.12.x" }
+
+function makeYearSupportedSet(spec) {
+  const set = new Set();
+  if (typeof spec !== "string") return set;
+
+  if (spec === "26.x" || spec === "26.x.x") {
+    yearVersions.forEach(v => set.add(v));
+    return set;
   }
-};
-function setToRangesDisplay(supportedSet) {
+
+  let m = spec.match(/^26\.(\d+)\.x$/);
+  if (m) {
+    const dropKey = "26." + m[1];
+    const indices = yearDropIndexMap[dropKey] || [];
+    indices.forEach(idx => set.add(mcVersionsOrderedAsc[idx]));
+    return set;
+  }
+
+  m = spec.match(/^26\.(\d+)$/);
+  if (m) {
+    const dropKey = "26." + m[1];
+    const indices = yearDropIndexMap[dropKey] || [];
+    indices.forEach(idx => set.add(mcVersionsOrderedAsc[idx]));
+    return set;
+  }
+
+  m = spec.match(/^26\.(\d+)-26\.(\d+)$/);
+  if (m) {
+    const startDrop = parseInt(m[1], 10);
+    const endDrop = parseInt(m[2], 10);
+    for (let d = startDrop; d <= endDrop; d++) {
+      const dropKey = "26." + d;
+      const indices = yearDropIndexMap[dropKey] || [];
+      indices.forEach(idx => set.add(mcVersionsOrderedAsc[idx]));
+    }
+    return set;
+  }
+
+  return set;
+}
+
+function expandSpecToSet(spec) {
+  const set = new Set();
+  if (!spec) return set;
+
+  const parts = spec.split(",").map(s => s.trim()).filter(Boolean);
+
+  for (const p of parts) {
+    if (p.startsWith("1.")) {
+      const classicSet = makeClassicSupportedSet(p);
+      classicSet.forEach(v => set.add(v));
+    } else if (p.startsWith("26.")) {
+      const yearSet = makeYearSupportedSet(p);
+      yearSet.forEach(v => set.add(v));
+    }
+  }
+
+  return set;
+}
+
+function classicSetToDisplay(supportedSet) {
   const out = [];
-  const N = mcVersionsOrderedAsc.length;
+  const N = classicVersions.length;
   let i = 0;
+
   while (i < N) {
-    const v = mcVersionsOrderedAsc[i];
+    const v = classicVersions[i];
     if (!supportedSet.has(v)) { i++; continue; }
+
     let j = i;
-    while (j + 1 < N && supportedSet.has(mcVersionsOrderedAsc[j + 1])) j++;
+    while (j + 1 < N && supportedSet.has(classicVersions[j + 1])) j++;
+
     const start = i;
     const end = j;
-    const startParts = mcVersionsOrderedAsc[start].split(".");
-    const endParts = mcVersionsOrderedAsc[end].split(".");
+    const startParts = classicVersions[start].split(".");
+    const endParts = classicVersions[end].split(".");
     const startMajor = startParts[0] + "." + startParts[1];
     const endMajor = endParts[0] + "." + endParts[1];
-    const startMajorRange = majorIndexMap[startMajor];
-    const endMajorRange = majorIndexMap[endMajor];
+    const startMajorRange = classicMajorIndexMap[startMajor];
+    const endMajorRange = classicMajorIndexMap[endMajor];
+
     if (start === startMajorRange.first && end === endMajorRange.last) {
       if (startMajor === endMajor) out.push(startMajor + ".x");
       else out.push(startMajor + ".x-" + endMajor + ".x");
     } else if (start === end) {
-      out.push(mcVersionsOrderedAsc[start]);
+      out.push(classicVersions[start]);
     } else {
-      out.push(mcVersionsOrderedAsc[start] + "-" + mcVersionsOrderedAsc[end]);
+      out.push(classicVersions[start] + "-" + classicVersions[end]);
     }
+
     i = j + 1;
   }
-  return out.join(", ");
+
+  return out;
 }
-function expandSpecToSet(spec) {
-  if (!spec) return new Set();
-  if (spec.endsWith(".x")) {
-    const mm = spec.match(/^(\d+\.\d+)\.x$/);
-    if (mm) {
-      const major = mm[1];
-      const range = majorIndexMap[major];
-      if (!range) return new Set();
-      const s = new Set();
-      for (let i = range.first; i <= range.last; i++) s.add(mcVersionsOrderedAsc[i]);
-      return s;
+
+function yearSetToDisplay(supportedSet) {
+  const present = yearVersions.filter(v => supportedSet.has(v));
+  if (!present.length) return [];
+
+  const dropMap = new Map();
+  for (const v of present) {
+    const parts = v.split(".");
+    const drop = parseInt(parts[1], 10);
+    const isHotfix = parts.length > 2;
+    if (!dropMap.has(drop)) dropMap.set(drop, { hasBase: false, hasHotfix: false });
+    const info = dropMap.get(drop);
+    if (isHotfix) info.hasHotfix = true;
+    else info.hasBase = true;
+  }
+
+  const drops = Array.from(dropMap.keys()).sort((a, b) => a - b);
+  const multipleDrops = drops.length > 1;
+  const anyHotfix = drops.some(d => dropMap.get(d).hasHotfix);
+  const allDropsHaveHotfix = drops.every(d => dropMap.get(d).hasHotfix);
+
+  if (!multipleDrops) {
+    const d = drops[0];
+    const info = dropMap.get(d);
+    if (info.hasHotfix) return [`26.${d}.x`];
+    return [`26.${d}`];
+  }
+
+  if (!anyHotfix) {
+    const first = drops[0];
+    const last = drops[drops.length - 1];
+    return [`26.${first}-26.${last}`];
+  }
+
+  if (allDropsHaveHotfix) return ["26.x.x"];
+
+  const parts = [];
+  for (const d of drops) {
+    const info = dropMap.get(d);
+    if (info.hasHotfix) parts.push(`26.${d}.x`);
+    else parts.push(`26.${d}`);
+  }
+  return parts;
+}
+
+function setToRangesDisplay(supportedSet) {
+  const classicSet = new Set();
+  const yearSet = new Set();
+
+  supportedSet.forEach(v => {
+    if (isClassicVersion(v)) classicSet.add(v);
+    else if (isYearVersion(v)) yearSet.add(v);
+  });
+
+  const parts = [];
+  const classicParts = classicSetToDisplay(classicSet);
+  const yearParts = yearSetToDisplay(yearSet);
+
+  if (classicParts.length) parts.push(classicParts.join(", "));
+  if (yearParts.length) parts.push(yearParts.join(", "));
+
+  return parts.join(", ");
+}
+
+const versionFiles = {
+  "Mainline (1.19.0+)": {
+    "2026.1.1": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2026.1.1.zip",
+      changelog: "changelogs/2026.1.1.txt",
+      supportedSpec: "1.19.x-1.21.x, 26.1-snapshot-1"
+    },
+    "2025.10.31": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.10.31.zip",
+      changelog: "changelogs/2025.10.31.txt",
+      supportedSpec: "1.19.x-1.21.10"
+    },
+    "2025.10.1": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.10.1.zip",
+      supportedSpec: "1.19.x-1.21.8"
+    },
+    "2025.8.1": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.8.1.zip",
+      supportedSpec: "1.19.x-1.21.8"
+    },
+    "2025.7.1": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.7.1.zip",
+      supportedSpec: "1.19.x-1.21.8"
+    },
+    "2025.6.1": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.6.1.zip",
+      supportedSpec: "1.19.x-1.21.6"
+    },
+    "2025.5.1": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.5.1.zip",
+      supportedSpec: "1.19.x-1.21.5"
+    },
+    "2025.4.5": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.4.5.zip",
+      supportedSpec: "1.19.x-1.21.5"
+    },
+    "2025.4.1": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.4.1.zip",
+      supportedSpec: "1.19.x-1.21.5"
+    },
+    "2025.3.25": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2025.3.25.zip",
+      supportedSpec: "1.19.x-1.21.5"
+    },
+    "2024.11.10": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2024.11.10.zip",
+      supportedSpec: "1.19.x-1.21.3"
+    },
+    "2024.9.12": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2024.9.12.zip",
+      supportedSpec: "1.19.x-1.21.1"
+    }
+  },
+  "Legacy (1.18.2)": {
+    "2025.3.25": {
+      file: "Default-Dark-Mode-Expansion-1.18.0+1.18.2-2025.3.25.zip",
+      changelog: "changelogs/1.18.x-2025.3.25.txt",
+      supportedSpec: "1.18.x"
+    }
+  },
+  "Legacy (1.16.x)": {
+    "2026.2.1 (unreleased)": {
+      file: "Default-Dark-Mode-Expansion-1.16.x-2026.2.1.zip",
+      supportedSpec: "1.16.x"
+    }
+  },
+  "Legacy (1.12.2)": {
+    "2025.10.31": {
+      file: "Default-Dark-Mode-Expansion-1.12.x-2025.10.31.zip",
+      changelog: "changelogs/1.12.x-2025.10.31.txt",
+      supportedSpec: "1.12.x"
     }
   }
-  const dashAll = spec.match(/^(\d+\.\d+)\.x-(\d+\.\d+)\.x$/);
-  if (dashAll) return makeSupportedSet(spec);
-  const dashToPatch = spec.match(/^(\d+\.\d+)\.x-(\d+\.\d+)\.(\d+)$/);
-  if (dashToPatch) return makeSupportedSet(spec);
-  return new Set();
+};
+
+let activeFilters = new Set();
+
+function expandFilterToSet(filterSpec) {
+  return expandSpecToSet(filterSpec);
 }
+
+function releaseMatchesFilters(releaseSupportedSet) {
+  if (activeFilters.size === 0) return true;
+
+  for (const filter of activeFilters) {
+    const filterSet = expandFilterToSet(filter);
+    let intersects = false;
+    for (const v of releaseSupportedSet) {
+      if (filterSet.has(v)) {
+        intersects = true;
+        break;
+      }
+    }
+    if (!intersects) return false;
+  }
+
+  return true;
+}
+
+function applyFilters() {
+  const items = document.querySelectorAll(".version-item");
+
+  items.forEach(item => {
+    const key = item.getAttribute("data-key");
+    const [group, label] = key.split("::");
+    const entry = versionFiles[group][label];
+
+    const supportedSet = expandSpecToSet(entry.supportedSpec);
+
+    if (releaseMatchesFilters(supportedSet)) item.style.display = "";
+    else item.style.display = "none";
+  });
+}
+
+function addFilter(filterSpec) {
+  activeFilters.add(filterSpec);
+  applyFilters();
+}
+
+function removeFilter(filterSpec) {
+  activeFilters.delete(filterSpec);
+  applyFilters();
+}
+
+function clearAllFilters() {
+  activeFilters.clear();
+  applyFilters();
+}
+
+function toggleFilter(filterSpec, enabled) {
+  if (enabled) activeFilters.add(filterSpec);
+  else activeFilters.delete(filterSpec);
+  applyFilters();
+}
+
 const versionListEl = document.getElementById("versionList");
 const versionHint = document.getElementById("versionHint");
 const downloadBtn = document.getElementById("downloadBtn");
 const generateBtn = document.getElementById("generateBtn");
 const backendStatus = document.getElementById("backendStatus");
 let selectedVersionKey = null;
+
 function buildVersionList() {
   if (!versionListEl) return;
   versionListEl.innerHTML = "";
+
   for (const group in versionFiles) {
     const groupLabel = document.createElement("div");
     groupLabel.className = "version-group-label small muted";
     groupLabel.textContent = group;
     versionListEl.appendChild(groupLabel);
+
     const entries = versionFiles[group];
     for (const label in entries) {
       const entry = entries[label];
       const key = `${group}::${label}`;
+
       const item = document.createElement("div");
       item.className = "version-item";
       item.setAttribute("data-key", key);
+
       const left = document.createElement("div");
       left.className = "version-left";
+
       const titleWrap = document.createElement("div");
       titleWrap.style.display = "flex";
       titleWrap.style.alignItems = "center";
       titleWrap.style.gap = "8px";
+
       const title = document.createElement("div");
       title.className = "version-label";
       title.textContent = label;
       titleWrap.appendChild(title);
+
       const supportedSet = expandSpecToSet(entry.supportedSpec);
       const compatText = supportedSet.size ? setToRangesDisplay(supportedSet) : "";
       if (compatText) {
@@ -405,18 +676,23 @@ function buildVersionList() {
         compatEl.textContent = compatText;
         titleWrap.appendChild(compatEl);
       }
+
       const metaWrap = document.createElement("div");
       metaWrap.style.display = "flex";
       metaWrap.style.alignItems = "center";
       metaWrap.style.gap = "8px";
+
       const meta = document.createElement("div");
       meta.className = "version-meta";
       meta.textContent = entry.file;
       metaWrap.appendChild(meta);
+
       left.appendChild(titleWrap);
       left.appendChild(metaWrap);
+
       const right = document.createElement("div");
       right.className = "version-right";
+
       if (entry.changelog) {
         const btn = document.createElement("button");
         btn.className = "changelog-btn";
