@@ -496,14 +496,18 @@ function setToRangesDisplay(supportedSet) {
 
 const versionFiles = {
   "Mainline (1.19.0+)": {
+    "2026.2.1": {
+      file: "Default-Dark-Mode-Expansion-1.19.0+-2026.2.1.zip",
+      changelog: "changelogs/2026.2.1.txt",
+      supportedSpec: "1.19.x-1.21.x, 26.1-snapshot-5"
+    },
     "2026.1.1": {
       file: "Default-Dark-Mode-Expansion-1.19.0+-2026.1.1.zip",
       changelog: "changelogs/2026.1.1.txt",
-      supportedSpec: "1.19.x-1.21.x, 26.1-snapshot-1"
+      supportedSpec: "1.19.x-1.21.x"
     },
     "2025.10.31": {
       file: "Default-Dark-Mode-Expansion-1.19.0+-2025.10.31.zip",
-      changelog: "changelogs/2025.10.31.txt",
       supportedSpec: "1.19.x-1.21.10"
     },
     "2025.10.1": {
@@ -547,7 +551,7 @@ const versionFiles = {
       supportedSpec: "1.19.x-1.21.1"
     }
   },
-  "Legacy (1.18.2)": {
+  "Legacy (1.18.x)": {
     "2025.3.25": {
       file: "Default-Dark-Mode-Expansion-1.18.0+1.18.2-2025.3.25.zip",
       changelog: "changelogs/1.18.x-2025.3.25.txt",
@@ -555,12 +559,13 @@ const versionFiles = {
     }
   },
   "Legacy (1.16.x)": {
-    "2026.2.1 (unreleased)": {
+    "2026.2.1": {
       file: "Default-Dark-Mode-Expansion-1.16.x-2026.2.1.zip",
+      changelog: "changelogs/1.16.x-2026.2.1.txt",
       supportedSpec: "1.16.x"
     }
   },
-  "Legacy (1.12.2)": {
+  "Legacy (1.12.x)": {
     "2025.10.31": {
       file: "Default-Dark-Mode-Expansion-1.12.x-2025.10.31.zip",
       changelog: "changelogs/1.12.x-2025.10.31.txt",
