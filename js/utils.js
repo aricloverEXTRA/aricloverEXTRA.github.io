@@ -36,7 +36,6 @@ function applyRecolor(imageData, mainHex, borderHex, vanillaMode) {
   }
 }
 
-/* Version spec parsing (unchanged from original) */
 const classicMajorIndexMap = {};
 classicVersions.forEach((v, i) => {
   const parts = v.split(".");
