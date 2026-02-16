@@ -63,7 +63,7 @@ function classicSetToDisplay(supportedSet) { /* full original function body */ }
 function yearSetToDisplay(supportedSet) { /* full original function body */ }
 function setToRangesDisplay(supportedSet) { /* full original function body */ }
 
-let activeFilters = new Set();
+var activeFilters = new Set();
 
 function releaseMatchesFilters(releaseSupportedSet) {
   if (activeFilters.size === 0) return true;
