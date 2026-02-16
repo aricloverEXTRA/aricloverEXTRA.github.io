@@ -19,9 +19,9 @@ themeToggle.onclick = () => {
 };
 
 /* Colors & presets */
-let currentMainColor = "#ffffff";
-let currentBorderColor = "#000000";
-let vanillaPresetActive = false;
+var currentMainColor = "#ffffff";
+var currentBorderColor = "#000000";
+var vanillaPresetActive = false;
 
 const mainColorPicker = document.getElementById("mainColorPicker");
 const borderColorPicker = document.getElementById("borderColorPicker");
