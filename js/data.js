@@ -13,6 +13,7 @@ var mcVersionsOrderedAsc = [...classicVersions, ...yearVersions];
 
 var versionFiles = {
   "Mainline (1.19.0+)": {
+    "2026.3.24": { file: "Default-Dark-Mode-Expansion-1.19.0+-2026.3.24.zip", changelog: "changelogs/2026.3.24.txt", supportedSpec: "1.19.x-1.21.x, 26.1" },
     "2026.2.1": { file: "Default-Dark-Mode-Expansion-1.19.0+-2026.2.1.zip", changelog: "changelogs/2026.2.1.txt", supportedSpec: "1.19.x-1.21.x, 26.1-snapshot-6" },
     "2026.1.1": { file: "Default-Dark-Mode-Expansion-1.19.0+-2026.1.1.zip", changelog: "changelogs/2026.1.1.txt", supportedSpec: "1.19.x-1.21.x" },
     "2025.10.31": { file: "Default-Dark-Mode-Expansion-1.19.0+-2025.10.31.zip", supportedSpec: "1.19.x-1.21.10" },
