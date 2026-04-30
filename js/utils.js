@@ -52,8 +52,19 @@ yearVersions.forEach((v, i) => {
   yearDropIndexMap[dropKey].push(i + classicVersions.length);
 });
 
+const snapshotIndexMap = {};
+snapshotVersions.forEach((v, i) => {
+  const match = v.match(/^26\.(\d+)-snapshot-(\d+)$/);
+  if (match) {
+    const dropKey = "26." + match[1];
+    if (!snapshotIndexMap[dropKey]) snapshotIndexMap[dropKey] = [];
+    snapshotIndexMap[dropKey].push(i + classicVersions.length + yearVersions.length);
+  }
+});
+
 function isClassicVersion(v) { return v.startsWith("1."); }
-function isYearVersion(v) { return v.startsWith("26."); }
+function isYearVersion(v) { return v.startsWith("26.") && !v.includes("snapshot"); }
+function isSnapshotVersion(v) { return v.includes("snapshot"); }
 
 function makeClassicSupportedSet(spec) {
   const set = new Set();
@@ -104,36 +115,84 @@ function makeYearSupportedSet(spec) {
   const set = new Set();
   if (typeof spec !== "string") return set;
 
-  if (spec === "26.x" || spec === "26.x.x") {
-    yearVersions.forEach(v => set.add(v));
-    return set;
-  }
-
-  let m = spec.match(/^26\.(\d+)\.x$/);
-  if (m) {
-    const dropKey = "26." + m[1];
-    const indices = yearDropIndexMap[dropKey] || [];
-    indices.forEach(idx => set.add(mcVersionsOrderedAsc[idx]));
-    return set;
-  }
-
-  m = spec.match(/^26\.(\d+)$/);
-  if (m) {
-    const dropKey = "26." + m[1];
-    const indices = yearDropIndexMap[dropKey] || [];
-    indices.forEach(idx => set.add(mcVersionsOrderedAsc[idx]));
-    return set;
-  }
-
-  m = spec.match(/^26\.(\d+)-26\.(\d+)$/);
+  // Handle ranges like "26.1.x-26.2.x"
+  let m = spec.match(/^26\.(\d+)\.x-26\.(\d+)\.x$/);
   if (m) {
     const startDrop = parseInt(m[1], 10);
     const endDrop = parseInt(m[2], 10);
     for (let d = startDrop; d <= endDrop; d++) {
       const dropKey = "26." + d;
-      const indices = yearDropIndexMap[dropKey] || [];
-      indices.forEach(idx => set.add(mcVersionsOrderedAsc[idx]));
+      yearVersions.forEach(v => {
+        if (v.startsWith(dropKey + ".") || v === dropKey) set.add(v);
+      });
     }
+    return set;
+  }
+
+  // Handle single drops like "26.1.x"
+  m = spec.match(/^26\.(\d+)\.x$/);
+  if (m) {
+    const dropKey = "26." + m[1];
+    yearVersions.forEach(v => {
+      if (v.startsWith(dropKey + ".") || v === dropKey) set.add(v);
+    });
+    return set;
+  }
+
+  // Handle all year versions
+  if (spec === "26.x" || spec === "26.x.x") {
+    yearVersions.forEach(v => set.add(v));
+    return set;
+  }
+
+  // Handle single version like "26.1"
+  m = spec.match(/^26\.(\d+)$/);
+  if (m) {
+    const dropKey = "26." + m[1];
+    yearVersions.forEach(v => {
+      if (v.startsWith(dropKey + ".") || v === dropKey) set.add(v);
+    });
+    return set;
+  }
+
+  return set;
+}
+
+function makeSnapshotSupportedSet(spec) {
+  const set = new Set();
+  if (typeof spec !== "string") return set;
+
+  // Handle ranges like "26.2-snapshot-1-26.2-snapshot-3"
+  let m = spec.match(/^26\.(\d+)-snapshot-(\d+)-26\.(\d+)-snapshot-(\d+)$/);
+  if (m) {
+    const startDrop = parseInt(m[1], 10);
+    const endSnap = parseInt(m[2], 10);
+    const endDrop = parseInt(m[3], 10);
+    
+    if (startDrop === endDrop) {
+      for (let i = parseInt(m[2], 10); i <= parseInt(m[4], 10); i++) {
+        set.add(`26.${startDrop}-snapshot-${i}`);
+      }
+    }
+    return set;
+  }
+
+  // Handle single snapshot range like "26.2-snapshot-1-3"
+  m = spec.match(/^26\.(\d+)-snapshot-(\d+)-(\d+)$/);
+  if (m) {
+    const drop = parseInt(m[1], 10);
+    const startSnap = parseInt(m[2], 10);
+    const endSnap = parseInt(m[3], 10);
+    for (let i = startSnap; i <= endSnap; i++) {
+      set.add(`26.${drop}-snapshot-${i}`);
+    }
+    return set;
+  }
+
+  // Handle single snapshot like "26.2-snapshot-1"
+  m = spec.match(/^26\.(\d+)-snapshot-(\d+)$/);
+  if (m) {
+    set.add(spec);
     return set;
   }
 
@@ -147,7 +206,10 @@ function expandSpecToSet(spec) {
   const parts = spec.split(",").map(s => s.trim()).filter(Boolean);
 
   for (const p of parts) {
-    if (p.startsWith("1.")) {
+    if (p.includes("snapshot")) {
+      const snapshotSet = makeSnapshotSupportedSet(p);
+      snapshotSet.forEach(v => set.add(v));
+    } else if (p.startsWith("1.")) {
       const classicSet = makeClassicSupportedSet(p);
       classicSet.forEach(v => set.add(v));
     } else if (p.startsWith("26.")) {
@@ -204,56 +266,76 @@ function yearSetToDisplay(supportedSet) {
     const parts = v.split(".");
     const drop = parseInt(parts[1], 10);
     const isHotfix = parts.length > 2;
-    if (!dropMap.has(drop)) dropMap.set(drop, { hasBase: false, hasHotfix: false });
-    const info = dropMap.get(drop);
-    if (isHotfix) info.hasHotfix = true;
-    else info.hasBase = true;
+    if (!dropMap.has(drop)) dropMap.set(drop, { versions: [] });
+    dropMap.get(drop).versions.push(v);
   }
 
   const drops = Array.from(dropMap.keys()).sort((a, b) => a - b);
-  const multipleDrops = drops.length > 1;
-  const anyHotfix = drops.some(d => dropMap.get(d).hasHotfix);
-  const allDropsHaveHotfix = drops.every(d => dropMap.get(d).hasHotfix);
+  const out = [];
 
-  if (!multipleDrops) {
-    const d = drops[0];
-    const info = dropMap.get(d);
-    if (info.hasHotfix) return [`26.${d}.x`];
-    return [`26.${d}`];
+  for (const drop of drops) {
+    const versions = dropMap.get(drop).versions;
+    const hasBase = versions.includes(`26.${drop}`);
+    const hasHotfixes = versions.some(v => v !== `26.${drop}`);
+
+    if (versions.length === 1 && hasBase) {
+      out.push(`26.${drop}`);
+    } else if (hasBase && hasHotfixes) {
+      out.push(`26.${drop}.x`);
+    } else if (hasHotfixes) {
+      out.push(...versions);
+    }
   }
 
-  if (!anyHotfix) {
-    const first = drops[0];
-    const last = drops[drops.length - 1];
-    return [`26.${first}-26.${last}`];
+  return out;
+}
+
+function snapshotSetToDisplay(supportedSet) {
+  const present = snapshotVersions.filter(v => supportedSet.has(v));
+  if (!present.length) return [];
+
+  const dropMap = new Map();
+  for (const v of present) {
+    const match = v.match(/^26\.(\d+)-snapshot-(\d+)$/);
+    if (match) {
+      const drop = parseInt(match[1], 10);
+      if (!dropMap.has(drop)) dropMap.set(drop, []);
+      dropMap.get(drop).push(parseInt(match[2], 10));
+    }
   }
 
-  if (allDropsHaveHotfix) return ["26.x.x"];
-
-  const parts = [];
-  for (const d of drops) {
-    const info = dropMap.get(d);
-    if (info.hasHotfix) parts.push(`26.${d}.x`);
-    else parts.push(`26.${d}`);
+  const out = [];
+  for (const [drop, snaps] of dropMap) {
+    snaps.sort((a, b) => a - b);
+    if (snaps.length === 1) {
+      out.push(`26.${drop}-snapshot-${snaps[0]}`);
+    } else {
+      out.push(`26.${drop}-snapshot-${snaps[0]}-${snaps[snaps.length - 1]}`);
+    }
   }
-  return parts;
+
+  return out;
 }
 
 function setToRangesDisplay(supportedSet) {
   const classicSet = new Set();
   const yearSet = new Set();
+  const snapshotSet = new Set();
 
   supportedSet.forEach(v => {
     if (isClassicVersion(v)) classicSet.add(v);
+    else if (isSnapshotVersion(v)) snapshotSet.add(v);
     else if (isYearVersion(v)) yearSet.add(v);
   });
 
   const parts = [];
   const classicParts = classicSetToDisplay(classicSet);
   const yearParts = yearSetToDisplay(yearSet);
+  const snapshotParts = snapshotSetToDisplay(snapshotSet);
 
   if (classicParts.length) parts.push(classicParts.join(", "));
   if (yearParts.length) parts.push(yearParts.join(", "));
+  if (snapshotParts.length) parts.push(snapshotParts.join(", "));
 
   return parts.join(", ");
 }
