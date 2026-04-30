@@ -106,7 +106,7 @@ document.getElementById("copyBorderBtn")?.addEventListener("click", async () => 
 
 /* Previews */
 const previewNames = ["Inventory", "Enchanting Table", "Loom"];
-const previewFiles = ["inventory.png", "enchanting_table.png", "loom.png"];
+const previewFiles = ["preview/inventory.png", "preview/enchanting_table.png", "preview/loom.png"];
 const slides = [document.getElementById("slide0"), document.getElementById("slide1"), document.getElementById("slide2")];
 const canvases = [document.getElementById("canvas0"), document.getElementById("canvas1"), document.getElementById("canvas2")];
 const previewLabelEl = document.getElementById("previewLabel");
@@ -120,7 +120,7 @@ let loaded = [false, false, false];
 function loadPreviews() {
   previewFiles.forEach((file, i) => {
     images[i].crossOrigin = "anonymous";
-    images[i].src = "preview/" + file;
+    images[i].src = file;
     images[i].onload = () => { loaded[i] = true; drawPreview(i); };
     images[i].onerror = () => {
       loaded[i] = false;
@@ -186,37 +186,28 @@ previewCarousel?.addEventListener("pointerup", e => {
 
 previewCarousel?.addEventListener("pointercancel", () => pointerDown = false);
 
-/* Filter functionality */
+/* Filter toggle */
 const filterToggle = document.getElementById("filterToggle");
 const filterContainer = document.getElementById("filterContainer");
 const clearFiltersBtn = document.getElementById("clearFiltersBtn");
-const filterPills = document.querySelectorAll(".filter-pill:not(.disabled)");
 
-if (filterToggle) {
-  filterToggle.addEventListener("click", () => {
-    filterContainer.classList.toggle("open");
-    filterToggle.classList.toggle("open");
-  });
-}
+filterToggle?.addEventListener("click", () => {
+  filterToggle.classList.toggle("open");
+  filterContainer.classList.toggle("open");
+});
 
-filterPills.forEach(pill => {
-  pill.addEventListener("click", (e) => {
-    const filterValue = pill.getAttribute("data-filter");
-    const isActive = pill.classList.contains("active");
-    
-    if (isActive) {
-      pill.classList.remove("active");
-      removeFilter(filterValue);
-    } else {
-      pill.classList.add("active");
-      addFilter(filterValue);
-    }
+clearFiltersBtn?.addEventListener("click", () => {
+  clearAllFilters();
+  document.querySelectorAll(".filter-pill:not(.disabled)").forEach(pill => {
+    pill.classList.remove("active");
   });
 });
 
-if (clearFiltersBtn) {
-  clearFiltersBtn.addEventListener("click", () => {
-    filterPills.forEach(pill => pill.classList.remove("active"));
-    clearAllFilters();
+/* Filter pills */
+document.querySelectorAll(".filter-pill:not(.disabled)").forEach(pill => {
+  pill.addEventListener("click", () => {
+    const spec = pill.getAttribute("data-filter");
+    pill.classList.toggle("active");
+    toggleFilter(spec, pill.classList.contains("active"));
   });
-}
+});
