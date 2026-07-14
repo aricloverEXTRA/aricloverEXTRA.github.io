@@ -5,11 +5,13 @@ const generateBtn = document.getElementById("generateBtn");
 const backendStatus = document.getElementById("backendStatus");
 let selectedVersionKey = null;
 let versionSearchIndex = [];
+let groupFirstItems = new Set();
 
 function buildVersionList() {
   if (!versionListEl) return;
   versionListEl.innerHTML = "";
   versionSearchIndex = [];
+  groupFirstItems.clear();
 
   for (const group in versionFiles) {
     const groupLabel = document.createElement("div");
@@ -17,9 +19,15 @@ function buildVersionList() {
     groupLabel.textContent = group;
     versionListEl.appendChild(groupLabel);
 
+    let isFirst = true;
     for (const label in versionFiles[group]) {
       const entry = versionFiles[group][label];
       const key = `${group}::${label}`;
+
+      if (isFirst) {
+        groupFirstItems.add(key);
+        isFirst = false;
+      }
 
       const item = document.createElement("div");
       item.className = "version-item";
@@ -33,7 +41,8 @@ function buildVersionList() {
         label,
         group,
         file: entry.file,
-        supportedSpec: entry.supportedSpec
+        supportedSpec: entry.supportedSpec,
+        downloads: entry.downloads
       });
 
       const left = document.createElement("div");
@@ -46,6 +55,14 @@ function buildVersionList() {
       title.className = "version-label";
       title.textContent = label;
       titleWrap.appendChild(title);
+
+      // Add "Latest" badge to first item in each group
+      if (groupFirstItems.has(key)) {
+        const latestBadge = document.createElement("div");
+        latestBadge.className = "version-latest";
+        latestBadge.textContent = "Latest";
+        titleWrap.appendChild(latestBadge);
+      }
 
       const supportedSet = expandSpecToSet(entry.supportedSpec);
       if (supportedSet.size) {
@@ -64,6 +81,15 @@ function buildVersionList() {
 
       const right = document.createElement("div");
       right.className = "version-right";
+
+      // Add download count
+      if (entry.downloads) {
+        const downloadCount = document.createElement("div");
+        downloadCount.className = "download-count";
+        downloadCount.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        <span>${entry.downloads}</span>`;
+        right.appendChild(downloadCount);
+      }
 
       if (entry.changelog) {
         const btn = document.createElement("button");

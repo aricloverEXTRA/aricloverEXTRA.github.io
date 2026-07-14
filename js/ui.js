@@ -114,7 +114,6 @@ const previewFiles = ["preview/inventory.png", "preview/enchanting_table.png", "
 const slides = [document.getElementById("slide0"), document.getElementById("slide1"), document.getElementById("slide2")];
 const canvases = [document.getElementById("canvas0"), document.getElementById("canvas1"), document.getElementById("canvas2")];
 const previewLabelEl = document.getElementById("previewLabel");
-const rotateBtn = document.getElementById("rotateBtn");
 const previewCarousel = document.getElementById("previewCarousel");
 
 let currentIndex = 0;
@@ -168,9 +167,6 @@ function setActiveIndex(n) {
 function rotatePreview(dir = 1) {
   setActiveIndex(currentIndex + dir);
 }
-
-rotateBtn?.addEventListener("click", () => rotatePreview(1));
-rotateBtn?.addEventListener("touchend", (e) => { e.preventDefault(); rotatePreview(1); }, { passive: false });
 
 const SWIPE_THRESHOLD = 40;
 let pointerDown = false;
