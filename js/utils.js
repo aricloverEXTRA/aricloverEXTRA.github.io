@@ -45,22 +45,26 @@ classicVersions.forEach((v, i) => {
 });
 
 function isClassicVersion(v) { return v.startsWith("1."); }
-function isYearVersion(v) { return v.startsWith("26."); }
 function isSnapshot(v) { return v.includes("snapshot"); }
 
 function makeClassicSupportedSet(spec) {
   const set = new Set();
   if (typeof spec !== "string") return set;
 
-  let m = spec.match(/^(\d+\.\d+)\.x$/);
+  // Handle range like "1.19.0-1.19.4"
+  let m = spec.match(/^(\d+\.\d+\.\d+)-(\d+\.\d+\.\d+)$/);
   if (m) {
-    const major = m[1];
-    const range = classicMajorIndexMap[major];
-    if (!range) return set;
-    for (let i = range.first; i <= range.last; i++) set.add(classicVersions[i]);
+    const startVersion = m[1];
+    const endVersion = m[2];
+    const startIdx = classicVersions.indexOf(startVersion);
+    const endIdx = classicVersions.indexOf(endVersion);
+    if (startIdx !== -1 && endIdx !== -1) {
+      for (let i = startIdx; i <= endIdx; i++) set.add(classicVersions[i]);
+    }
     return set;
   }
 
+  // Handle range like "1.19.x-1.21.x"
   m = spec.match(/^(\d+\.\d+)\.x-(\d+\.\d+)\.x$/);
   if (m) {
     const startMajor = m[1];
@@ -71,6 +75,7 @@ function makeClassicSupportedSet(spec) {
     return set;
   }
 
+  // Handle range like "1.19.x-1.21.10"
   m = spec.match(/^(\d+\.\d+)\.x-(\d+\.\d+)\.(\d+)$/);
   if (m) {
     const startMajor = m[1];
@@ -90,51 +95,19 @@ function makeClassicSupportedSet(spec) {
     return set;
   }
 
-  return set;
-}
-
-function makeYearSupportedSet(spec) {
-  const set = new Set();
-  if (typeof spec !== "string") return set;
-
-  // Handle exact version like "26.1" or "26.1.1"
-  let m = spec.match(/^26\.(\d+)(?:\.(\d+))?$/);
+  // Handle major.minor.x like "1.19.x"
+  m = spec.match(/^(\d+\.\d+)\.x$/);
   if (m) {
-    const dropNum = m[1];
-    const hotfixNum = m[2];
-    if (hotfixNum) {
-      // Exact hotfix like 26.1.1
-      set.add(`26.${dropNum}.${hotfixNum}`);
-    } else {
-      // Base version like 26.1 - match both 26.1 and any 26.1.x
-      set.add(`26.${dropNum}`);
-      yearVersions.forEach(v => {
-        if (v.startsWith(`26.${dropNum}.`)) set.add(v);
-      });
-    }
+    const major = m[1];
+    const range = classicMajorIndexMap[major];
+    if (!range) return set;
+    for (let i = range.first; i <= range.last; i++) set.add(classicVersions[i]);
     return set;
   }
 
-  // Handle snapshot like "26.2-snapshot-1"
-  m = spec.match(/^26\.(\d+)(-snapshot-\d+)$/);
-  if (m) {
-    const snapshotVersion = `26.${m[1]}${m[2]}`;
-    set.add(snapshotVersion);
-    return set;
-  }
-
-  // Handle ranges like "26.1-26.3"
-  m = spec.match(/^26\.(\d+)-26\.(\d+)$/);
-  if (m) {
-    const startDrop = parseInt(m[1], 10);
-    const endDrop = parseInt(m[2], 10);
-    for (let d = startDrop; d <= endDrop; d++) {
-      set.add(`26.${d}`);
-      yearVersions.forEach(v => {
-        if (v.startsWith(`26.${d}.`) || v.startsWith(`26.${d}-`)) set.add(v);
-      });
-    }
-    return set;
+  // Handle exact version like "1.19.0"
+  if (classicVersions.includes(spec)) {
+    set.add(spec);
   }
 
   return set;
@@ -150,9 +123,6 @@ function expandSpecToSet(spec) {
     if (p.startsWith("1.")) {
       const classicSet = makeClassicSupportedSet(p);
       classicSet.forEach(v => set.add(v));
-    } else if (p.startsWith("26.")) {
-      const yearSet = makeYearSupportedSet(p);
-      yearSet.forEach(v => set.add(v));
     }
   }
 
@@ -195,48 +165,15 @@ function classicSetToDisplay(supportedSet) {
   return out;
 }
 
-function yearSetToDisplay(supportedSet) {
-  const present = yearVersions.filter(v => supportedSet.has(v));
-  if (!present.length) return [];
-
-  const out = [];
-  const seen = new Set();
-
-  for (const v of present) {
-    if (seen.has(v)) continue;
-    seen.add(v);
-
-    if (isSnapshot(v)) {
-      out.push(v);
-    } else if (v.includes(".") && v.split(".").length === 3) {
-      // hotfix like 26.1.1
-      out.push(v);
-    } else {
-      // base version like 26.1
-      out.push(v);
-    }
-  }
-
-  return out;
-}
-
 function setToRangesDisplay(supportedSet) {
   const classicSet = new Set();
-  const yearSet = new Set();
 
   supportedSet.forEach(v => {
     if (isClassicVersion(v)) classicSet.add(v);
-    else if (isYearVersion(v)) yearSet.add(v);
   });
 
-  const parts = [];
   const classicParts = classicSetToDisplay(classicSet);
-  const yearParts = yearSetToDisplay(yearSet);
-
-  if (classicParts.length) parts.push(classicParts.join(", "));
-  if (yearParts.length) parts.push(yearParts.join(", "));
-
-  return parts.join(", ");
+  return classicParts.join(", ");
 }
 
 var activeFilters = new Set();
