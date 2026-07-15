@@ -1,0 +1,136 @@
+## ✨ Added: New feature or support for additional mods.
+- ✨ Added support for [Accessories](https://modrinth.com/mod/Accessories) **(1.20+)**
+- ✨ Added support for [AdditionZ](https://modrinth.com/mod/additionz) **(1.19+)**
+- ✨ Added support for [Advancement Plaques](https://github.com/AHilyard/AdvancementPlaques) **(1.12, 1.15+)**
+- ✨ Added support for [Alex’s Caves](https://modrinth.com/mod/alexs-caves) **(1.20+)**
+- ✨ Added support for [Alex's Mobs](https://github.com/AlexModGuy/AlexsMobs) **(1.19+)**
+- ✨ Added support for [Animal Feeding Trough](https://github.com/Slexom/animal-feeding-trough) **(1.19.3+)**
+- ✨ Added support for [Aquaculture 2](https://www.curseforge.com/minecraft/mc-mods/aquaculture) **(1.15+)**
+- ✨ Added support for [Axiom](https://modrinth.com/mod/axiom) **(1.20+)**
+- ✨ Added support for [BackSlot](https://modrinth.com/mod/backslot) **(1.16+)**
+- ✨ Added support for [Bartering Station](https://modrinth.com/mod/bartering-station) **(1.19+)**  
+- ✨ Added support for [Better Archeology](https://www.curseforge.com/minecraft/mc-mods/better-archeology) **(1.20+)**
+- ✨ Added support for [Better Recipe Book](https://github.com/mrshmllow/BetterRecipeBook) **(1.18+)**
+- ✨ Added support for [Botania](https://modrinth.com/mod/botania) **(1.18+)**
+- ✨ Added support for [Bundle Inventory](https://www.curseforge.com/minecraft/mc-mods/bundle-inventory) **(1.21.2+)**
+- ✨ Added support for [Cadmus](https://www.curseforge.com/minecraft/mc-mods/cadmus) **(1.19+)**
+- ✨ Added support for [Catalogue](https://modrinth.com/mod/catalogue) **(1.21+)**
+- ✨ Added support for [Chai's Inventory Sorter](https://github.com/Chailotl/inventory-sort) **(1.20+)**
+- ✨ Added support for [Chat Patches](https://modrinth.com/mod/chatpatches) **(1.19.4+)**
+- ✨ Added support for [Chisels & Bits](https://www.curseforge.com/minecraft/mc-mods/chisels-bits) **(1.19+)**
+- ✨ Added support for [Cobblemon](https://modrinth.com/mod/cobblemon) **(1.21+)**
+- ✨ Added support for [ComputerCraft](https://modrinth.com/mod/cc-tweaked) **(1.19+)**
+- ✨ Added support for [Cooking for Blockheads](https://modrinth.com/mod/cooking-for-blockheads) **(1.20+)**
+- ✨ Added support for [Corpse](https://modrinth.com/mod/corpse) **(1.16+)**
+- ✨ Added support for [Cosmetic Armor](https://modrinth.com/mod/cosmetic-armor) **(1.16+)**
+- ✨ Added support for [Cosmetic Armor Reworked](https://legacy.curseforge.com/minecraft/mc-mods/cosmetic-armor-reworked) **(1.9+)**
+- ✨ Added support for [Crabber's Delight](https://modrinth.com/mod/crabbers-delight) **(1.20+)**
+- ✨ Added support for [CraftMine](https://www.minecraft.net/en-us/article/the-craftmine-update) **(25w14craftmine)** - NOTE: CRAFTMINE IS NOT A MOD
+- ✨ Added support for [Create (6.0.3)](https://modrinth.com/mod/create) **(1.20+)**
+- ✨ Added support for [Create: The Factory Must Grow](https://modrinth.com/mod/create-the-factory-must-grow) **(1.20+)**
+- ✨ Added support for [Creative Crafting Menus](https://modrinth.com/mod/creativecraftingmenus) **(1.21.9+)**
+- ✨ Added support for [Deep Resonance](https://modrinth.com/mod/deep-resonance) **(1.18+)**
+- ✨ Added support for [Dungeon Now Loading](https://modrinth.com/mod/dungeon-now-loading) **(1.20+)**
+- ✨ Added support for [DungeonZ](https://modrinth.com/mod/dungeonz) **(1.19.2+)**
+- ✨ Added support for [Echo Chest](https://modrinth.com/mod/echo-chest) **(1.20.4+)**
+- ✨ Added support for [Enchancement](https://modrinth.com/mod/enchancement) **(1.20.6+)**
+- ✨ Added support for [Energized Power](https://modrinth.com/mod/energized-power) **(1.21+)**
+- ✨ Added support for [Epic Stats Remastered](https://modrinth.com/mod/epic-stats-remastered) **(1.20+)**
+- ✨ Added support for [Exposure](https://modrinth.com/mod/exposure) **(1.21+)**
+- ✨ Added support for [ExtraStorage](https://www.curseforge.com/minecraft/mc-mods/extrastorage) **(1.16+)**
+- ✨ Added support for [Extreme Sound Muffler](https://modrinth.com/mod/extreme-sound-muffler) **(1.16.5+)**
+- ✨ Added support for [FiltPick](https://www.curseforge.com/minecraft/mc-mods/filtpick) **(1.20.2+)**
+- ✨ Added support for [Farming for Blockheads](https://modrinth.com/mod/farming-for-blockheads) **(1.20+)**
+- ✨ Added support for [Firmament](https://modrinth.com/mod/firmament) **(1.20+)**
+- ✨ Added support for [Golden Hopper](https://www.curseforge.com/minecraft/mc-mods/golden-hopper) **(1.20.4+)**
+- ✨ Added support for [Golem Overhaul](https://modrinth.com/mod/golem-overhaul) **(1.21+)**  
+- ✨ Added support for [GraveStone Mod](https://modrinth.com/mod/gravestone-mod) **(1.14+)**
+- ✨ Added support for [Guns Without Roses](https://modrinth.com/mod/guns-without-roses) **(1.20+)**
+- ✨ Added support for [Horseshoes](https://modrinth.com/mod/horseshoes) **(1.20+)**
+- ✨ Added support for [Illager Invasion](https://github.com/Fuzss/illagerinvasion) **(1.18+)**
+- ✨ Added support for [Industrial Foregoing](https://modrinth.com/mod/industrial-foregoing) **(1.12+)**
+- ✨ Added support for [Integrated Terminals](https://modrinth.com/mod/integrated-terminals) **(1.21+)**
+- ✨ Added support for [Inventory Tabs](https://github.com/sisby-folk/inventory-tabs) **(1.20+)**
+- ✨ Added support for [Iron Furnaces](https://modrinth.com/mod/iron-furnaces) **(1.18+)**
+- ✨ Added support for [Legacy Skins](https://github.com/RedRain0o0/legacy-skins) **(1.20+)**
+- ✨ Added support for [Legacy Tweaks](https://github.com/ViolaFlower/Legacy-Tweaks) **(1.21+)**
+- ✨ Added support for [Legacy4J 1.8.2+](https://github.com/Wilyicaro/Legacy-Minecraft) **(1.20+)**
+- ✨ Added support for [LevelZ](https://modrinth.com/mod/levelz) **(1.20+)**
+- ✨ Added support for [LibZ](https://modrinth.com/mod/libz) **(1.19+)**  
+- ✨ Added support for [Lightman's Currency](https://modrinth.com/mod/lightmans-currency) **(1.20+)**
+- ✨ Added support for [Lucky's Spelunker's Charm II](https://modrinth.com/mod/spelunkers-charm-ii) **(1.19+)**
+- ✨ Added support for [Map Atlases](https://modrinth.com/mod/map-atlases) **(1.19+)**
+- ✨ Added support for [MCA Reborn](https://modrinth.com/mod/minecraft-comes-alive-reborn) **(1.19+)**
+- ✨ Added support for [Mekanism](https://www.curseforge.com/minecraft/mc-mods/mekanism) **(1.20+)**
+- ✨ Added support for [MineColonies](https://www.curseforge.com/minecraft/mc-mods/minecolonies) **(1.12, 1.14+)**
+- ✨ Added support for [Miner's Delight](https://modrinth.com/mod/miners-delight) **(1.18+)**  
+- ✨ Added support for [Modern Dynamics](https://modrinth.com/mod/modern-dynamics) **(1.18+)**
+- ✨ Added support for [Modern Industrialization](https://modrinth.com/mod/modern-industrialization) **(1.19+)**
+- ✨ Added support for [Modular Routers](https://modrinth.com/mod/modular-routers) **(1.21+)**
+- ✨ Added support for [MrCrayfish’s Gun Mod](https://www.curseforge.com/minecraft/mc-mods/mrcrayfishs-gun-mod) **(1.18+)**
+- ✨ Added support for [My Nether’s Delight](https://www.curseforge.com/minecraft/mc-mods/my-nethers-delight) **(1.19+)**
+- ✨ Added support for [Mythic Metals Decorations](https://modrinth.com/mod/mythicmetals-decorations) **(1.19+)**
+- ✨ Added support for [Nether Chested](https://modrinth.com/mod/new-nether-chest) **(1.20+)**
+- ✨ Added support for [No Chat Reports](https://github.com/Aizistral-Studios/No-Chat-Reports) **(1.20+)**
+- ✨ Added support for [No Tree Punching](https://github.com/alcatrazEscapee/no-tree-punching) **(1.18+)**
+- ✨ Added support for [Nyf's Quivers](https://modrinth.com/mod/nyfs-quivers) **(1.16+)**  
+- ✨ Added support for [OpenItemPuller](https://modrinth.com/mod/openitempuller) **(1.20+)**
+- ✨ Added support for [Paginated Advancements](https://modrinth.com/mod/paginatedadvancements) **(1.18+)**
+- ✨ Added support for [Polymorphic Energistics](https://modrinth.com/mod/polymorphic-energistics) **(1.21+)**
+- ✨ Added support for [Pretty Pipes](https://www.curseforge.com/minecraft/mc-mods/pretty-pipes) **(1.16+)**
+- ✨ Added support for [ProjectE](https://www.curseforge.com/minecraft/mc-mods/projecte) **(ALL)**
+- ✨ Added support for [Quark](https://modrinth.com/mod/quark) **(1.20+)**
+- ✨ Added support for [Raised](https://modrinth.com/mod/raised) **(1.20+)**
+- ✨ Added support for [Reborn Storage](https://www.curseforge.com/minecraft/mc-mods/rebornstorage) **(1.18+)**
+- ✨ Added support for [Refined Cooking](https://modrinth.com/mod/refined-cooking) **(1.16+)**
+- ✨ Added support for [Refined Storage](https://modrinth.com/mod/refined-storage) **(1.16-1.20)**
+- ✨ Added support for [Refined Storage 2](https://github.com/refinedmods/refinedstorage2/releases) **(1.21+)**
+- ✨ Added support for [Refined Storage: Requestify](https://modrinth.com/mod/rs-requestify) **(1.16+)**
+- ✨ Added support for [RFToolsBase](https://modrinth.com/mod/rftools-base) **(1.15+)**
+- ✨ Added support for [RFToolsControl](https://modrinth.com/mod/rftools-control) **(1.15+)**
+- ✨ Added support for [RFToolsDimensions](https://modrinth.com/mod/rftools-dimensions) **(1.16, 1.18+)**
+- ✨ Added support for [RFToolsPower](https://modrinth.com/mod/rftools-power) **(1.15+)**
+- ✨ Added support for [Sawmill](https://modrinth.com/mod/universal-sawmill) **(1.19+)**
+- ✨ Added support for [Screenshot Viewer](https://modrinth.com/mod/screenshot-viewer) **(1.20+)**
+- ✨ Added support for [Simple Storage Network](https://www.curseforge.com/minecraft/mc-mods/simple-storage-network) **(1.18+)**
+- ✨ Added support for [Simply Backpacks](https://curseforge.com/minecraft/mc-mods/simply-backpacks) **(1.16+)**
+- ✨ Added support for [Skin Shuffle](https://modrinth.com/mod/skinshuffle) **(1.20+)**
+- ✨ Added support for [Skyblocker](https://github.com/SkyblockerMod/Skyblocker) **(1.20+)**
+- ✨ Added support for [Sophisticated Storage](https://www.curseforge.com/minecraft/mc-mods/sophisticated-storage) **(1.18+)**
+- ✨ Added support for [Spell Engine](https://modrinth.com/mod/spell-engine) **(1.21+)**
+- ✨ Added support for [Storage Drawers](https://modrinth.com/mod/storagedrawers) **(1.12, 1.14+)**
+- ✨ Added support for [Supplementaries](https://modrinth.com/mod/supplementaries) **(1.18+)**
+- ✨ Added support for [TerraFirmaCraft](https://modrinth.com/mod/terrafirmacraft) **(1.20+)**
+- ✨ Added support for [The Aether](https://modrinth.com/mod/aether) **(1.20+)**
+- ✨ Added support for [The Aether II](https://modrinth.com/mod/aether-ii) **(1.21.8)**
+- ✨ Added support for [The Box of Horrors](https://www.curseforge.com/minecraft/mc-mods/box-of-horrors) **(1.19+)**
+- ✨ Added support for [The Midnight Lurker](https://modrinth.com/mod/the-midnight-lurker) **(1.20+)**
+- ✨ Added support for [Tide](https://modrinth.com/mod/tide) **(1.20+)**
+- ✨ Added support for [Timeless and Classics Zero](https://www.curseforge.com/minecraft/mc-mods/timeless-and-classics-zero) **(1.18+)**
+- ✨ Added support for [Tool Trims](https://modrinth.com/datapack/tool-trims) **(1.17+)**
+- ✨ Added support for [Tough As Nails](https://modrinth.com/mod/tough-as-nails) **(1.20.4+)**
+- ✨ Added support for [Universal Graves](https://modrinth.com/mod/universal-graves) **(1.20+)**
+- ✨ Added support for [Utility Belt](https://www.curseforge.com/minecraft/mc-mods/utility-belt) **(1.20+)**
+- ✨ Added support for [Vic's Point Blank](https://www.curseforge.com/minecraft/mc-mods/vics-point-blank) **(1.20+)**
+- ✨ Added support for [VillagersPlus](https://www.curseforge.com/minecraft/mc-mods/villagersplus-forge) **(1.18+)**
+- ✨ Added support for [Waystones](https://modrinth.com/mod/waystones) **(1.21+)**
+- ✨ Added support for [Waystones-RP](https://modrinth.com/resourcepack/waystones-rp) **(1.20.2+)** - NOTE: WAYSTONES-RP IS NOT A MOD
+- ✨ Added support for [Wildfire's Female Gender Mod](https://modrinth.com/mod/female-gender) **(1.20+)**
+- ✨ Added support for [XNet](https://modrinth.com/mod/xnet) **(1.12+)**
+- ✨ Added support for [YetAnotherConfigLib](https://modrinth.com/mod/yacl) **(1.20+)**
+## 🍱 Updated: Improvements made to existing features, textures or mods for better compatibility.
+- 🍱 Updated support for [Applied Energistics 2 Wireless Terminals](https://modrinth.com/mod/applied-energistics-2-wireless-terminals) **(1.20+)**
+- 🍱 Updated support for [Brewin' And Chewin'](https://www.curseforge.com/minecraft/mc-mods/brewin-and-chewin) **(1.20+)**
+- 🍱 Updated support for [Curios API](https://github.com/TheIllusiveC4/Curios) **(1.20+)**
+- 🍱 Updated support for [Expanded Storage](https://modrinth.com/mod/expanded-storage) **(1.18+)**
+- 🍱 Updated support for [JEI](https://github.com/mezz/JustEnoughItems) **(1.20+)**
+- 🍱 Updated support for [LibGui](https://github.com/CottonMC/LibGui) **(1.20.2+)**
+- 🍱 Updated support for [Origins](https://github.com/apace100/origins-fabric) **(1.20+)**
+- 🍱 Updated support for [owo-lib](https://github.com/wisp-forest/owo-lib) **(1.20+)**
+- 🍱 Updated support for [Polymorph](https://modrinth.com/mod/polymorph) **(1.20.2+)**
+- 🍱 Updated support for [Shulker Box Tooltip](https://modrinth.com/mod/shulkerboxtooltip) **(1.21.2+)**  
+- 🍱 Updated support for [Sophisticated Core](https://github.com/Salandora/SophisticatedCore) **(1.19+)**
+- 🍱 Updated support for [The Twilight Forest](https://www.curseforge.com/minecraft/mc-mods/the-twilight-forest) **(1.20+)**
+- 🍱 Updated support for [Traveler's Backpack](https://modrinth.com/mod/travelersbackpack) **(1.18, 1.20+)**
+
+NOTE: CONTAINS ALL OF THE CHANGES FROM PRIOR RELEASES OF THE "DEFAULT DARK MODE: EXPANSION" RESOURCE PACK!
